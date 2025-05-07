@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import br.edu.ifsp.dmo2.redesocial.ui.activities.profile.ProfileActivity
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityRegisterBinding
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
@@ -22,6 +21,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater);
         setContentView(binding.root)
+
         setInputStyle()
         setResultLauncher()
         setOnClickListener()
@@ -79,10 +79,6 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.arrowBack.setOnClickListener {
             finish()
-        }
-
-        binding.inputEmail.addTextChangedListener {
-            binding.inputEmailContainer.error = null
         }
     }
 
