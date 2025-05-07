@@ -57,7 +57,7 @@ class RegisterViewModel : ViewModel() {
         val password = _password.value.orEmpty()
         val confirmPassword = _confirmPassword.value.orEmpty()
 
-        if (!validateEmail(email) || !validatePassword(password) || validateConfirmPassword(confirmPassword)) {
+        if (!validateEmail(email) || !validatePassword(password) || !validateConfirmPassword(confirmPassword)) {
             return
         }
 
@@ -70,7 +70,7 @@ class RegisterViewModel : ViewModel() {
                 } else {
                     _emailError.value = when (task.exception) {
                         is FirebaseAuthUserCollisionException -> "E-mail já está em uso."
-                        is FirebaseAuthWeakPasswordException -> "A senha é muito graca."
+                        is FirebaseAuthWeakPasswordException -> "A senha é muito fraca."
                         is FirebaseAuthInvalidCredentialsException -> "E-mail inválido"
                         else -> "Erro ao criar usuário: ${task.exception?.message}"
                     }
@@ -87,15 +87,15 @@ class RegisterViewModel : ViewModel() {
     private fun validateEmail(email: String): Boolean {
         return when {
             email.isBlank() -> {
-                _email.value = "Preencha o campo de e-mail"
+                _emailError.value = "Preencha o campo de e-mail"
                 false
             }
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                _email.value = "E-mail inválido"
+                _emailError.value = "E-mail inválido"
                 false
             }
             else -> {
-                _email.value = null
+                _emailError.value = null
                 true
             }
         }

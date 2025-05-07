@@ -27,7 +27,7 @@ class PostAdapter(private val posts: Array<Post>) : RecyclerView.Adapter<PostAda
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.txtDescricao.text = posts[position].getDescricao()
-        holder.imgPost.setImageBitmap(posts[position].getFoto())
+        holder.txtDescricao.text = posts[position].description
+        holder.imgPost.setImageBitmap(posts[position].photo)
     }
 }
