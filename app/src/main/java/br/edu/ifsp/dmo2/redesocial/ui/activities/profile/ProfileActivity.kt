@@ -64,20 +64,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun createUser() {
-        val credentials = openBundle() ?: run {
-            finish()
-            return
-        }
-        val username = binding.inputUsername.text.toString().trim()
-        if (!isValidUsername(username)) {
-            Toast.makeText(this, "Username inválido. Deve conter letras, números e sublinhado (3 a 20 caracteres).", Toast.LENGTH_LONG).show()
-            return
-        }
-        val name = binding.inputName.text.toString().trim()
-        if (!isValidName(name)) {
-            Toast.makeText(this, "Nome inválido. Deve conter apenas letras e espaços em branco.", Toast.LENGTH_LONG).show()
-            return
-        }
         checkUsernameAvailability(username) { isAvailable ->
             if (isAvailable) {
                 firebaseAuth
@@ -155,14 +141,6 @@ class ProfileActivity : AppCompatActivity() {
             setResult(RESULT_CANCELED, resultIntent)
             finish()
         }
-    }
-
-    private fun isValidUsername(username: String): Boolean {
-        return username.matches(Regex("^[a-zA-Z0-9_]{3,20}$"))
-    }
-
-    private fun isValidName(name: String): Boolean {
-        return name.matches(Regex("^[a-zA-Z\\s]{2,50}$"))
     }
 
     private fun setInputStyle() {
