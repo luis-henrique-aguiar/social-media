@@ -31,6 +31,10 @@ class HomeViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
+    init {
+        loadUserData()
+    }
+
     private fun loadUserData() {
         val user = firebaseAuth.currentUser
         if (user == null) {
