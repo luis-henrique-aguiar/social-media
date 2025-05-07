@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityRegisterBinding
@@ -78,6 +79,7 @@ class RegisterActivity : AppCompatActivity() {
 
         viewModel.isLoading.observe(this) {
             binding.registerButton.isEnabled = !it
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
     }
 

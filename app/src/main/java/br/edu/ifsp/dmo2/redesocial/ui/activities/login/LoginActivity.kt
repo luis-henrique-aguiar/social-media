@@ -2,6 +2,7 @@ package br.edu.ifsp.dmo2.redesocial.ui.activities.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -46,6 +47,11 @@ class LoginActivity : AppCompatActivity() {
 
         binding.arrowBack.setOnClickListener {
             finish()
+        }
+
+        viewModel.isLoading.observe(this) {
+            binding.loginButton.isEnabled = !it
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
     }
 

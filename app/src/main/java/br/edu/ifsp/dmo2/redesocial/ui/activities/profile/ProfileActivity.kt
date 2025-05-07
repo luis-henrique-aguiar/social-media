@@ -11,6 +11,7 @@ import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
 import android.graphics.BitmapFactory
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
@@ -82,6 +83,7 @@ class ProfileActivity : AppCompatActivity() {
 
         viewModel.isLoading.observe(this) {
             binding.saveDataButton.isEnabled = !it
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
     }
 
