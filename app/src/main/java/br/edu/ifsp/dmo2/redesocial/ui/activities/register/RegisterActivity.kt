@@ -69,7 +69,11 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         viewModel.registerSuccess.observe(this) {
-            if (it) startActivity(Intent(this, ProfileActivity::class.java))
+            if (it) {
+                val mIntent = Intent(this, ProfileActivity::class.java)
+                mIntent.putExtra("email", viewModel.email.value)
+                startActivity(mIntent)
+            }
         }
 
         viewModel.isLoading.observe(this) {

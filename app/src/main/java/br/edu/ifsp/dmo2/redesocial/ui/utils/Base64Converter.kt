@@ -2,6 +2,7 @@ package br.edu.ifsp.dmo2.redesocial.ui.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Base64
@@ -26,8 +27,15 @@ object Base64Converter {
     }
 
     fun drawableToString(drawable: Drawable): String {
-        val bitmap = (drawable as? BitmapDrawable)?.bitmap
-            ?: createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
+        val bitmap = if (drawable is BitmapDrawable) {
+            drawable.bitmap
+        } else {
+            val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.width, canvas.height)
+            drawable.draw(canvas)
+            bitmap
+        }
         return bitmapToString(bitmap)
     }
 }

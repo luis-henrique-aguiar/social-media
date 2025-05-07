@@ -6,41 +6,32 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import br.edu.ifsp.dmo2.redesocial.ui.utils.Base64Converter
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityProfileBinding
 import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.activity.result.ActivityResultLauncher
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import com.google.firebase.firestore.FirebaseFirestoreException
+import androidx.activity.viewModels
+import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
-    private var selectedBitmap: Bitmap? = null
-    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val viewModel: ProfileViewModel by viewModels()
     private lateinit var gallery: ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setInputStyle()
+        openBundle()
+        setupObservers()
+        setupTextWatcher()
         setupGalleryPicker()
         setOnClickListener()
-    }
-
-    private fun openBundle(): Pair<String, String>? {
-        val extras = intent.extras
-        val email = extras?.getString("email")
-        val password = extras?.getString("password")
-        return if (email != null && password != null) Pair(email, password) else null
     }
 
     private fun setupGalleryPicker() {
@@ -50,7 +41,7 @@ class ProfileActivity : AppCompatActivity() {
                     contentResolver.openInputStream(uri)?.use { inputStream ->
                         val bitmap = BitmapFactory.decodeStream(inputStream)
                         binding.profileImage.setImageBitmap(bitmap)
-                        selectedBitmap = bitmap
+                        viewModel.updateSelectedBitmap(bitmap)
                     } ?: run {
                         Toast.makeText(this, "Erro ao carregar imagem", Toast.LENGTH_LONG).show()
                     }
@@ -63,84 +54,57 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun createUser() {
-        checkUsernameAvailability(username) { isAvailable ->
-            if (isAvailable) {
-                firebaseAuth
-                    .createUserWithEmailAndPassword(credentials.first, credentials.second)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            if (firebaseAuth.currentUser != null) {
-                                val email = firebaseAuth.currentUser!!.email.toString()
-                                val data = getUserData()
-                                saveUserData(email, username, data)
-                            }
-                        } else {
-                            val errorMessage = when (task.exception) {
-                                is FirebaseAuthUserCollisionException -> "E-mail já está em uso."
-                                is FirebaseAuthWeakPasswordException -> "A senha é muito fraca."
-                                is FirebaseAuthInvalidCredentialsException -> "Credenciais inválidas."
-                                else -> "Erro ao criar usuário: ${task.exception?.message}"
-                            }
-                            val resultIntent = Intent().putExtra("error_message", errorMessage)
-                            setResult(RESULT_CANCELED, resultIntent)
-                            finish()
-                        }
-                    }
-            } else {
-                binding.inputUsernameContainer.error = "Username não disponível"
-                Toast.makeText(this, "Username não disponível", Toast.LENGTH_LONG).show();
+    private fun openBundle() {
+        val email = intent.extras?.getString("email")
+        if (email != null) {
+            viewModel.updateEmail(email)
+        } else {
+            Toast.makeText(this, "Erro: E-mail não fornecido", Toast.LENGTH_LONG).show()
+            finish()
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.usernameError.observe(this) {
+            binding.inputUsernameContainer.error = it
+        }
+
+        viewModel.fullNameError.observe(this) {
+            binding.inputNameContainer.error = it
+        }
+
+        viewModel.registerSuccess.observe(this) {
+            if (it) {
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
             }
+        }
+
+        viewModel.isLoading.observe(this) {
+            binding.saveDataButton.isEnabled = !it
         }
     }
 
-    private fun checkUsernameAvailability(username: String, callback: (Boolean) -> Unit) {
-        val db = Firebase.firestore
-        db.collection("usernames").document(username).get()
-            .addOnSuccessListener { document ->
-                callback(!document.exists())
+    private fun setupTextWatcher() {
+        binding.inputName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.updateFullName(s.toString())
+                viewModel.clearErrors()
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Erro ao verificiar username: ${e.message}", Toast.LENGTH_LONG).show()
-                callback(false)
+        })
+
+        binding.inputUsername.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.updateUsername(s.toString())
+                viewModel.clearErrors()
             }
-    }
-
-    private fun getUserData(): HashMap<String, String> {
-        val username = binding.inputUsername.text.toString()
-        val fullName = binding.inputName.text.toString()
-        val profilePhotoString = convertImageToBase64()
-        return hashMapOf(
-            "fullName" to fullName,
-            "username" to username,
-            "profilePhoto" to profilePhotoString
-        )
-    }
-
-    private fun convertImageToBase64(): String {
-        return selectedBitmap?.let { bitmap ->
-            Base64Converter.bitmapToString(bitmap)
-        } ?: binding.profileImage.drawable?.let { drawable ->
-            Base64Converter.drawableToString(drawable)
-        } ?: ""
-    }
-
-    private fun saveUserData(email: String, username: String, data: HashMap<String, String>) {
-        val db = Firebase.firestore
-        db.runTransaction { transaction ->
-            val usernameRef = db.collection("usernames").document(username)
-            val userRef = db.collection("users").document(email)
-            if (transaction.get(usernameRef).exists()) throw FirebaseFirestoreException("Username ja está em uso.", FirebaseFirestoreException.Code.ABORTED)
-            transaction.set(userRef, data)
-            transaction.set(usernameRef, hashMapOf("email" to email))
-        }.addOnSuccessListener {
-            setResult(RESULT_OK)
-            finish()
-        }.addOnFailureListener { e ->
-            val resultIntent = Intent().putExtra("error_message", "Erro ao salvar dados: ${e.message}")
-            setResult(RESULT_CANCELED, resultIntent)
-            finish()
-        }
+        })
     }
 
     private fun setInputStyle() {
@@ -152,7 +116,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun setOnClickListener() {
         binding.saveDataButton.setOnClickListener {
-            createUser()
+            viewModel.register()
         }
 
         binding.changeImageButton.setOnClickListener {
