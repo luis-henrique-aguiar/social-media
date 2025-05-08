@@ -3,101 +3,122 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#1F305E"
-    android:padding="20dp">
+    android:background="#F1EDED"
+    android:layout_height="wrap_content">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_description_container"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold_italic"
-        app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="8dp"
-        app:boxCornerRadiusBottomStart="8dp"
-        android:layout_marginTop="12dp"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        app:boxStrokeColor="#FFF"
-        app:boxStrokeWidth="2dp"
-        app:hintTextColor="#FFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/added_image"
-        app:placeholderText="Descrição">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold_italic"
-            android:hint="O que você está pensando?"
-            android:inputType="text"
-            android:textColor="#FFF"
-            android:textColorHint="#FFF" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/confirm_button"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="110dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="12dp"
-        android:layout_gravity="center"
-        android:fontFamily="@font/poppins_bold_italic"
-        android:padding="12dp"
-        android:text="Enviar"
-        android:textColor="#FFFFFF"
-        app:backgroundTint="#6700FF"
-        app:cornerRadius="12dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardPreventCornerOverlap="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_description_container"
-        app:rippleColor="#BB86FC"
-        app:strokeColor="#FFFFFF"
-        app:strokeWidth="2dp" />
-
-    <ImageView
-        android:id="@+id/add_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:clickable="true"
-        android:src="@drawable/camera_add_svgrepo_com"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#E0E0E0"
+        app:strokeWidth="1dp">
 
-    <ImageView
-        android:id="@+id/added_image"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_image"
-        tools:src="@tools:sample/avatars" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/cancel_button"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="110dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:backgroundTint="#F00"
-        android:fontFamily="@font/poppins_bold_italic"
-        android:padding="12dp"
-        android:text="Cancelar"
-        android:textColor="#FFFFFF"
-        app:backgroundTint="#6700FF"
-        app:cornerRadius="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/confirm_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/confirm_button"
-        app:rippleColor="#BB86FC"
-        app:strokeColor="#FFFFFF"
-        app:strokeWidth="2dp" />
+            <ImageView
+                android:id="@+id/add_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:src="@drawable/camera_add_svgrepo_com"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#666666" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/added_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:scaleType="centerCrop"
+                android:visibility="visible"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_image"
+                app:shapeAppearanceOverlay="@style/RoundedImage"
+                tools:src="@tools:sample/avatars" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_description_container"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="1dp"
+                app:hintTextColor="#000000"
+                android:textColorHint="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/added_image"
+                app:placeholderText="Descrição">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold_italic"
+                    android:hint="O que você está pensando?"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/confirm_button"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/poppins_bold_italic"
+                android:padding="12dp"
+                android:text="Enviar"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="#6700FF"
+                app:cornerRadius="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_description_container"
+                app:rippleColor="#BB86FC"
+                app:strokeColor="#FFFFFF"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel_button"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/poppins_bold_italic"
+                android:padding="12dp"
+                android:text="Cancelar"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="#FF0000"
+                app:cornerRadius="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_description_container"
+                app:rippleColor="#FF6666"
+                app:strokeColor="#FFFFFF"
+                app:strokeWidth="1dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

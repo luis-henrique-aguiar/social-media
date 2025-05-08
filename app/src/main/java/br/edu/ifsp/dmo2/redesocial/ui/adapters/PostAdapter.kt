@@ -1,12 +1,8 @@
 package br.edu.ifsp.dmo2.redesocial.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.PostItemBinding
 import br.edu.ifsp.dmo2.redesocial.model.Post
 

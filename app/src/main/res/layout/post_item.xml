@@ -3,111 +3,150 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#1F305E"
-    android:padding="20dp"
+    android:background="#1F2F5D"
+    android:padding="5dp"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profile_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:contentDescription="Profile Photo"
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardPreventCornerOverlap="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/CircularImage"
-        tools:src="@tools:sample/avatars" />
+        app:strokeColor="#E0E0E0"
+        app:strokeWidth="1dp">
 
-    <TextView
-        android:id="@+id/fullName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="Luis Henrique"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toTopOf="@+id/profile_image" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-    <TextView
-        android:id="@+id/locale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_light"
-        android:text="Santa Lúcia, Brasil"
-        android:textColor="#ccc"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
-        app:layout_constraintStart_toStartOf="@+id/fullName"
-        app:layout_constraintTop_toBottomOf="@+id/fullName" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profile_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="Profile Photo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/CircularImage"
+                tools:src="@tools:sample/avatars" />
 
-    <Button
-        android:id="@+id/elevatedButton"
-        style="@style/Widget.Material3.Button.ElevatedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Follow"
-        android:fontFamily="@font/poppins_bold"
-        android:textColor="@color/white"
-        android:backgroundTint="#1F305E"
-        android:background="@drawable/button_border"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/fullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Luis Henrique"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/post_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image"
-        app:shapeAppearanceOverlay="@style/RoundedImage"
-        tools:src="@tools:sample/avatars" />
+            <TextView
+                android:id="@+id/locale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_light"
+                android:text="Santa Lúcia, Brasil"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+                app:layout_constraintStart_toStartOf="@+id/fullName"
+                app:layout_constraintTop_toBottomOf="@+id/fullName" />
 
-    <TextView
-        android:id="@+id/post_description"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/poppins_light"
-        android:textColor="@color/white"
-        android:layout_height="0dp"
-        android:text="TESTEEEEEEEEEE"
-        app:layout_constraintTop_toBottomOf="@+id/post_image"
-        tools:layout_editor_absoluteX="20dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/login_button"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:textAlignment="center"
+                android:layout_height="55dp"
+                android:fontFamily="@font/poppins_medium"
+                android:padding="12dp"
+                android:text="Seguir"
+                android:textColor="#000000"
+                app:backgroundTint="#FFFFFF"
+                app:cornerRadius="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="#8D8897"
+                app:strokeColor="#E6D7D7"
+                app:strokeWidth="1dp" />
 
-    <ImageView
-        android:id="@+id/ic_heart"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/heart_2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/post_description" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/post_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_image"
+                app:shapeAppearanceOverlay="@style/RoundedImage"
+                tools:src="@tools:sample/avatars" />
 
-    <ImageView
-        android:id="@+id/ic_chat"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:src="@drawable/chat_round_svgrepo_com"
-        app:layout_constraintBottom_toBottomOf="@+id/ic_heart"
-        app:layout_constraintStart_toEndOf="@id/ic_heart"
-        app:layout_constraintTop_toTopOf="@+id/ic_heart" />
+            <TextView
+                android:id="@+id/post_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_light"
+                android:text="TESTEEEEEEEEEE"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/post_image" />
 
-    <ImageView
-        android:id="@+id/ic_plane"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:src="@drawable/paper_plane_svgrepo_com"
-        app:layout_constraintBottom_toBottomOf="@+id/ic_heart"
-        app:layout_constraintStart_toEndOf="@+id/ic_chat"
-        app:layout_constraintTop_toTopOf="@+id/ic_heart" />
+            <ImageView
+                android:id="@+id/ic_heart"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/heart_2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/post_description"
+                app:tint="#666666" />
 
-    <ImageView
-        android:id="@+id/ic_save"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/save_svgrepo_com"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ic_heart" />
+            <ImageView
+                android:id="@+id/ic_chat"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/chat_round_svgrepo_com"
+                app:layout_constraintBottom_toBottomOf="@+id/ic_heart"
+                app:layout_constraintStart_toEndOf="@id/ic_heart"
+                app:layout_constraintTop_toTopOf="@+id/ic_heart"
+                app:tint="#666666" />
+
+            <ImageView
+                android:id="@+id/ic_plane"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/paper_plane_svgrepo_com"
+                app:layout_constraintBottom_toBottomOf="@+id/ic_heart"
+                app:layout_constraintStart_toEndOf="@+id/ic_chat"
+                app:layout_constraintTop_toTopOf="@+id/ic_heart"
+                app:tint="#666666" />
+
+            <ImageView
+                android:id="@+id/ic_save"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/save_svgrepo_com"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ic_heart"
+                app:tint="#666666" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
