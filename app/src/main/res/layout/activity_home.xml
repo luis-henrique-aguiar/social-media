@@ -54,7 +54,6 @@
             app:layout_constraintTop_toTopOf="@+id/profile_image" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feeds"
         android:layout_width="match_parent"
