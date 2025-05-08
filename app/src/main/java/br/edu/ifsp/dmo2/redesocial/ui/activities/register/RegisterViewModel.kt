@@ -38,18 +38,14 @@ class RegisterViewModel : ViewModel() {
 
     fun updateEmail(newEmail: String) {
         _email.value = newEmail
-        validateEmail(newEmail)
     }
 
     fun updatePassword(newPassword: String) {
         _password.value = newPassword
-        validatePassword(newPassword)
-        validateConfirmPassword(_confirmPassword.value.orEmpty())
     }
 
     fun updateConfirmPassword(newConfirmPassword: String) {
         _confirmPassword.value = newConfirmPassword
-        validateConfirmPassword(newConfirmPassword)
     }
 
     fun register() {
