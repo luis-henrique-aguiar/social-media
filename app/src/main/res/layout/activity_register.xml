@@ -20,29 +20,30 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_register"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/test2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#fff" />
+        />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
-        style="@style/TextAppearance.MaterialComponents.Headline5"
+        style="@style/CustomHeadline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:letterSpacing="0.02"
+        android:layout_marginTop="10dp"
+        android:letterSpacing="0.09"
         android:text="Cadastro"
         android:textColor="#FFFFFF"
-        android:textSize="50sp"
+        android:textSize="43sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintBottom_toTopOf="@+id/input_email_container"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -59,6 +60,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold_italic"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxCornerRadiusBottomStart="8dp"
@@ -76,6 +78,7 @@
             android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold_italic"
             android:hint="E-mail"
             android:inputType="textEmailAddress"
             android:textColor="#FFF"
@@ -88,6 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxBackgroundMode="outline"
+        android:fontFamily="@font/poppins_bold_italic"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxCornerRadiusBottomStart="8dp"
         app:boxCornerRadiusTopEnd="8dp"
@@ -106,6 +110,7 @@
             android:id="@+id/input_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold_italic"
             android:hint="Senha"
             android:inputType="textPassword"
             android:textColor="#FFF"
@@ -118,6 +123,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxBackgroundMode="outline"
+        android:fontFamily="@font/poppins_bold_italic"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxCornerRadiusBottomStart="8dp"
         app:boxCornerRadiusTopEnd="8dp"
@@ -137,6 +143,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Confirmar senha"
+            android:fontFamily="@font/poppins_bold_italic"
             android:inputType="textPassword"
             android:textColor="#FFF"
             android:textColorHint="#FFF" />
@@ -148,6 +155,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_gravity="center"
+        android:fontFamily="@font/poppins_bold_italic"
         android:padding="12dp"
         android:text="Cadastrar"
         android:textColor="#FFFFFF"
@@ -167,13 +175,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
+        app:layout_constraintGuide_percent="0.99" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.44" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,4 +4,8 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="CustomHeadline5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:fontFamily">@font/poppins_bold_italic</item>
+        <item name="fontFamily">@font/poppins_bold_italic</item>
+    </style>
 </resources>

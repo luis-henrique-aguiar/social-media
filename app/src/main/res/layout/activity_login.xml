@@ -20,22 +20,21 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/ic_login"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/loginimage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="#fff" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
-        style="@style/TextAppearance.MaterialComponents.Headline5"
+        style="@style/CustomHeadline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:letterSpacing="0.02"
-        android:layout_marginTop="10dp"
+        android:fontFamily="@font/poppins_bold_italic"
+        android:letterSpacing="0.08"
         android:text="Login"
         android:textColor="#FFFFFF"
         android:textSize="50sp"
@@ -51,6 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxBackgroundMode="outline"
+        android:fontFamily="@font/poppins_bold_italic"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxCornerRadiusBottomStart="8dp"
         app:boxCornerRadiusTopEnd="8dp"
@@ -67,6 +67,7 @@
             android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold_italic"
             android:hint="E-mail"
             android:inputType="textEmailAddress"
             android:textColor="#FFF"
@@ -79,6 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxBackgroundMode="outline"
+        android:fontFamily="@font/poppins_bold_italic"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxCornerRadiusBottomStart="8dp"
         app:boxCornerRadiusTopEnd="8dp"
@@ -97,6 +99,7 @@
             android:id="@+id/input_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold_italic"
             android:hint="Senha"
             android:inputType="textPassword"
             android:textColor="#FFF"
@@ -121,6 +124,7 @@
         android:layout_gravity="center"
         android:padding="12dp"
         android:text="Entrar"
+        android:fontFamily="@font/poppins_bold_italic"
         android:textColor="#FFFFFF"
         app:backgroundTint="#6700FF"
         app:cornerRadius="12dp"
@@ -137,13 +141,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
+        app:layout_constraintGuide_percent="0.85" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.31" />
+        app:layout_constraintGuide_percent="0.43" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
