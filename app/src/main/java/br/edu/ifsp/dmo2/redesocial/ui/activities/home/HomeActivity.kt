@@ -33,21 +33,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         viewModel.userData.observe(this) { userData ->
-            binding.username.text = "Olá, ${userData.username}"
-            binding.email.text = userData.email
             userData.profilePhoto?.let { binding.profileImage.setImageBitmap(it) }
         }
     }
 
     private fun setOnClickListener() {
-        binding.logoutButton.setOnClickListener {
-            viewModel.logout()
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
 
-        binding.feedButton.setOnClickListener {
-            viewModel.loadPosts()
-        }
     }
 }

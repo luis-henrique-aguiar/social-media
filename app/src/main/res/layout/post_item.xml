@@ -2,53 +2,103 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#1F305E"
     android:padding="20dp"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView"
-        android:layout_width="300dp"
-        android:layout_height="280dp"
-        app:cardElevation="10dp"
-        android:backgroundTint="#1F305E"
-        app:cardCornerRadius="10dp"
-        app:strokeColor="@color/white"
-        app:strokeWidth="2dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintEnd_toEndOf="parent"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profile_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="Profile Photo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/CircularImage"
+        tools:src="@tools:sample/avatars" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/fullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Luis Henrique"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_person" />
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_light"
+        android:text="\@LuisHenrique"
+        android:textColor="#ccc"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/fullName"
+        app:layout_constraintStart_toStartOf="@+id/fullName"
+        app:layout_constraintTop_toBottomOf="@+id/fullName" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/image"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:layout_alignParentEnd="true"
-                android:text="Descrição"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </RelativeLayout>
+    <Button
+        android:id="@+id/elevatedButton"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Follow"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/white"
+        android:backgroundTint="#1F305E"
+        android:background="@drawable/button_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image"
+        app:shapeAppearanceOverlay="@style/RoundedImage"
+        tools:src="@tools:sample/avatars" />
 
-    </com.google.android.material.card.MaterialCardView>
+    <ImageView
+        android:id="@+id/ic_heart"
+        android:layout_width="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="30dp"
+        android:src="@drawable/heart_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+    <ImageView
+        android:id="@+id/ic_chat"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/chat_round_svgrepo_com"
+        app:layout_constraintBottom_toBottomOf="@+id/ic_heart"
+        app:layout_constraintStart_toEndOf="@id/ic_heart"
+        app:layout_constraintTop_toTopOf="@+id/ic_heart" />
 
+    <ImageView
+        android:id="@+id/ic_plane"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/paper_plane_svgrepo_com"
+        app:layout_constraintBottom_toBottomOf="@+id/ic_heart"
+        app:layout_constraintStart_toEndOf="@+id/ic_chat"
+        app:layout_constraintTop_toTopOf="@+id/ic_heart" />
 
-
-
+    <ImageView
+        android:id="@+id/ic_save"
+        android:layout_marginTop="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/save_svgrepo_com"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
