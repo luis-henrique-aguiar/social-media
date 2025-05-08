@@ -26,16 +26,20 @@ object Base64Converter {
         }
     }
 
-    fun drawableToString(drawable: Drawable): String {
+    fun drawableToString(drawable: Drawable?): String? {
+        if (drawable == null) return null
         val bitmap = if (drawable is BitmapDrawable) {
             drawable.bitmap
         } else {
-            val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            bitmap
+            createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight).also { bitmap ->
+                val canvas = Canvas(bitmap)
+                drawable.setBounds(0, 0, canvas.width, canvas.height)
+                drawable.draw(canvas)
+            }
         }
-        return bitmapToString(bitmap)
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
 }

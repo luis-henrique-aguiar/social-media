@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/locale"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_light"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView"
+        android:id="@+id/post_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -62,14 +62,25 @@
         app:shapeAppearanceOverlay="@style/RoundedImage"
         tools:src="@tools:sample/avatars" />
 
+    <TextView
+        android:id="@+id/post_description"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/poppins_light"
+        android:textColor="@color/white"
+        android:layout_height="0dp"
+        android:text="TESTEEEEEEEEEE"
+        app:layout_constraintTop_toBottomOf="@+id/post_image"
+        tools:layout_editor_absoluteX="20dp" />
+
     <ImageView
         android:id="@+id/ic_heart"
         android:layout_width="30dp"
-        android:layout_marginTop="10dp"
         android:layout_height="30dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/heart_2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/post_description" />
 
     <ImageView
         android:id="@+id/ic_chat"
@@ -93,11 +104,10 @@
 
     <ImageView
         android:id="@+id/ic_save"
-        android:layout_marginTop="10dp"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/save_svgrepo_com"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="@+id/ic_heart" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,27 +7,38 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ifsp.dmo2.redesocial.R
+import br.edu.ifsp.dmo2.redesocial.databinding.PostItemBinding
 import br.edu.ifsp.dmo2.redesocial.model.Post
 
-class PostAdapter(private val posts: Array<Post>) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
+class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imgPost: ImageView = view.findViewById(R.id.profile_image)
-        val txtDescricao: TextView = view.findViewById(R.id.text_description)
+    private val posts: MutableList<Post> = mutableListOf()
+
+    fun updatePosts(newPosts: List<Post>) {
+        posts.clear()
+        posts.addAll(newPosts)
+        notifyDataSetChanged()
+    }
+
+    class ViewHolder(private val binding: PostItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(post: Post) {
+            binding.postDescription.text = post.description
+            post.photo.let { bitmap ->
+                binding.postImage.setImageBitmap(bitmap)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.post_item, parent, false)
-        return ViewHolder(view)
+        val binding = PostItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(posts[position])
     }
 
     override fun getItemCount(): Int {
         return posts.size
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.txtDescricao.text = posts[position].description
-        holder.imgPost.setImageBitmap(posts[position].photo)
     }
 }

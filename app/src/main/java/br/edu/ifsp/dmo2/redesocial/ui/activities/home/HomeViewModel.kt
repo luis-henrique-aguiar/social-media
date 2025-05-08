@@ -22,6 +22,12 @@ class HomeViewModel : ViewModel() {
     private val _userData = MutableLiveData<UserData>()
     val userData: LiveData<UserData> get() = _userData
 
+    private val _postImage = MutableLiveData<String?>()
+    val postImage: LiveData<String?> get() = _postImage
+
+    private val _postDescription = MutableLiveData<String>()
+    val postDescription: LiveData<String> get() = _postDescription
+
     private val _posts = MutableLiveData<List<Post>>()
     val posts: LiveData<List<Post>> get() = _posts
 
@@ -58,6 +64,35 @@ class HomeViewModel : ViewModel() {
             }
             .addOnFailureListener { e ->
                 _error.value = "Errro ao carregar dados do usuário: ${e.message}"
+                _isLoading.value = false
+            }
+    }
+
+    fun addPost(image: String?, description: String) {
+        if (image == null) {
+            _error.value = "Erro ao carregar a imagem"
+            return
+        }
+
+        val user = firebaseAuth.currentUser
+        if (user == null) {
+            _error.value = "Usuário não autenticado."
+            return
+        }
+
+        val postData = hashMapOf(
+            "description" to description,
+            "image" to image,
+            "userEmail" to user.email
+        )
+
+        _isLoading.value = true
+        db.collection("posts").add(postData)
+            .addOnSuccessListener {
+                loadPosts()
+            }
+            .addOnFailureListener { e ->
+                _error.value = "Error ao realizar o post: ${e.message}"
                 _isLoading.value = false
             }
     }
