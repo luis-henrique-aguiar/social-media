@@ -19,9 +19,10 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
     class ViewHolder(private val binding: PostItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(post: Post) {
             binding.postDescription.text = post.description
-            post.photo.let { bitmap ->
-                binding.postImage.setImageBitmap(bitmap)
-            }
+            binding.postImage.setImageBitmap(post.photo)
+            binding.fullName.text = post.fullName
+            binding.profileImage.setImageBitmap(post.userProfilePhoto)
+            binding.locale.text = post.location ?: ""
         }
     }
 
