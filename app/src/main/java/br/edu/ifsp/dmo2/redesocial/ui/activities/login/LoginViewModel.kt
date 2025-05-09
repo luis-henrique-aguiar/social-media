@@ -11,8 +11,17 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 class LoginViewModel : ViewModel() {
     private val firebaseAuth = FirebaseAuth.getInstance()
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> get() = _error
+    private val _email = MutableLiveData("")
+    val email: LiveData<String> get() = _email
+
+    private val _password = MutableLiveData("")
+    val password: LiveData<String> get() = _password
+
+    private val _emailError = MutableLiveData<String?>()
+    val emailError: LiveData<String?> get() = _emailError
+
+    private val _passwordError = MutableLiveData<String?>()
+    val passwordError: LiveData<String?> get() = _passwordError
 
     private val _success = MutableLiveData<Boolean>()
     val success: LiveData<Boolean> get() = _success
@@ -20,19 +29,21 @@ class LoginViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    fun login(email: String, password: String) {
-        if (!validateCredentials(email, password)) {
-            _error.value = "Preencha todos os campos"
-            return
-        }
+    fun updateEmail(newEmail: String) {
+        _email.value = newEmail
+        validateEmail(newEmail)
+    }
 
-        if (!isValidEmail(email)) {
-            _error.value = "E-mail inválido."
-            return
-        }
+    fun updatePassword(newPassword: String) {
+        _password.value = newPassword
+        validatePassword(newPassword)
+    }
 
-        if (!isValidPassword(password)) {
-            _error.value = "A senha precisa ter 6 caracteres, 1 número e 1 dígito."
+    fun login() {
+        val email = _email.value.orEmpty()
+        val password = _password.value.orEmpty()
+
+        if (!validateEmail(email) || !validatePassword(password)) {
             return
         }
 
@@ -43,7 +54,7 @@ class LoginViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     _success.value = true
                 } else {
-                    _error.value = when (task.exception) {
+                    _emailError.value = when (task.exception) {
                         is FirebaseAuthInvalidCredentialsException -> "E-mail ou senha incorretos."
                         is FirebaseAuthInvalidUserException -> "Usuário não encontrado."
                         else -> "Erro ao fazer login: ${task.exception?.message}"
@@ -52,15 +63,38 @@ class LoginViewModel : ViewModel() {
             }
     }
 
-    private fun validateCredentials(email: String, password: String): Boolean {
-        return email.isNotBlank() && password.isNotBlank();
+    fun clearErrors() {
+        _emailError.value = null
+        _passwordError.value = null
     }
 
-    private fun isValidEmail(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    private fun validateEmail(email: String): Boolean {
+        return when {
+            email.isBlank() -> {
+                _emailError.value = "Preencha o campo de e-mail"
+                false
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                _emailError.value = "E-mail inválido"
+                false
+            }
+            else -> {
+                _emailError.value = null
+                true
+            }
+        }
     }
 
-    private fun isValidPassword(password: String): Boolean {
-        return password.length >= 6 && password.any { it.isDigit() } && password.any { it.isLetter() }
+    private fun validatePassword(password: String): Boolean {
+        return when {
+            password.isBlank() -> {
+                _passwordError.value = "Preencha o campo de senha"
+                false
+            }
+            else -> {
+                _passwordError.value = null
+                true
+            }
+        }
     }
 }
