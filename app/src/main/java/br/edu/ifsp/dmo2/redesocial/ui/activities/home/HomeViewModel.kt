@@ -126,7 +126,6 @@ class HomeViewModel : ViewModel() {
                     val description = document.getString("description") ?: ""
                     val userEmail = document.getString("userEmail")
                     val fullName = document.getString("fullName") ?: "Usuário"
-                    val username = document.getString("username") ?: "Usuário"
                     val location = document.getString("location")
 
                     if (imageString == null || userEmail == null) {
