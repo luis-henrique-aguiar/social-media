@@ -40,6 +40,9 @@ class EditProfileViewModel : ViewModel() {
     private val _dataLoaded = MutableLiveData<Boolean>()
     val dataLoaded: LiveData<Boolean> get() = _dataLoaded
 
+    private val _success = MutableLiveData<Boolean>(false)
+    val success: LiveData<Boolean> get() = _success
+
     init {
         loadUserData()
     }
@@ -150,10 +153,12 @@ class EditProfileViewModel : ViewModel() {
             ))
             .addOnSuccessListener {
                 _isLoading.value = false
+                _success.value = true
                 clearErrors()
             }
             .addOnFailureListener { e ->
                 _isLoading.value = false
+                _success.value = false
                 _fullNameError.value = "Erro ao salvar dados: ${e.message}"
             }
     }

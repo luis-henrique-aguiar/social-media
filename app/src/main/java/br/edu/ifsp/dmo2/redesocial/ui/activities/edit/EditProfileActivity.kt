@@ -102,6 +102,13 @@ class EditProfileActivity : AppCompatActivity() {
             binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
 
+        viewModel.success.observe(this) {
+            if (it) {
+                Toast.makeText(this, "Dados atualizados com sucesso.", Toast.LENGTH_LONG).show()
+                finish()
+            }
+        }
+
         viewModel.dataLoaded.observe(this) {
             if (it) {
                 binding.inputName.setText(viewModel.fullName.value)
