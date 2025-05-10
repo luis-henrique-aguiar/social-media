@@ -18,36 +18,42 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profile_image"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:src="@drawable/ic_person"
-        android:contentDescription="Profile Photo"
+    <FrameLayout
+        android:id="@+id/profile_image_container"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/CircularImage"
-        tools:src="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/change_image_button"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="130dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:padding="12dp"
-        android:text="Alterar"
-        android:textColor="#FFFFFF"
-        app:backgroundTint="#6700FF"
-        app:cornerRadius="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image"
-        app:rippleColor="#BB86FC"
-        app:strokeColor="#FFFFFF"
-        app:strokeWidth="2dp" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_image"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:clickable="true"
+            android:contentDescription="Profile Photo"
+            android:src="@drawable/ic_person"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/CircularImage"
+            tools:src="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/edit_icon"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_gravity="end|bottom"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:src="@drawable/camera2"
+            app:tint="#fff" />
+    </FrameLayout>
+
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
@@ -154,7 +160,6 @@
         app:rippleColor="#BB86FC"
         app:strokeColor="#FFFFFF"
         app:strokeWidth="2dp" />
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"

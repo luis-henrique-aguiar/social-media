@@ -121,7 +121,13 @@ class ProfileActivity : AppCompatActivity() {
             viewModel.register()
         }
 
-        binding.changeImageButton.setOnClickListener {
+        binding.profileImage.setOnClickListener {
+            gallery.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
+        }
+
+        binding.editIcon.setOnClickListener {
             gallery.launch(
                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
             )
