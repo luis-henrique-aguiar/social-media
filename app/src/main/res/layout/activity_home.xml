@@ -23,6 +23,7 @@
             android:id="@+id/profile_image"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:clickable="true"
             android:background="@drawable/circular_border"
             android:contentDescription="Profile Photo"
             android:scaleType="centerCrop"
@@ -37,9 +38,9 @@
             android:layout_height="wrap_content"
             android:alpha="0.95"
             android:fontFamily="@font/poppins_bold"
-            android:text="Social Media"
+            android:text="Feed"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="@id/profile_image"
             app:layout_constraintEnd_toStartOf="@id/notification_container"
             app:layout_constraintHorizontal_bias="0.5"
@@ -55,12 +56,12 @@
             app:layout_constraintTop_toTopOf="@id/profile_image">
 
             <ImageView
-                android:id="@+id/notification_ic"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:id="@+id/leave_icon"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:src="@drawable/save_svgrepo_com"
+                android:src="@drawable/leave_icon"
                 app:tint="@color/white" />
 
         </FrameLayout>

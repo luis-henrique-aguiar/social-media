@@ -1,6 +1,7 @@
 package br.edu.ifsp.dmo2.redesocial.ui.activities.home
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.Address
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityHomeBinding
 import br.edu.ifsp.dmo2.redesocial.databinding.AddPostBinding
+import br.edu.ifsp.dmo2.redesocial.ui.activities.edit.EditProfileActivity
+import br.edu.ifsp.dmo2.redesocial.ui.activities.login.LoginActivity
 import br.edu.ifsp.dmo2.redesocial.ui.adapters.PostAdapter
 import br.edu.ifsp.dmo2.redesocial.ui.utils.Base64Converter
 import br.edu.ifsp.dmo2.redesocial.ui.utils.LocationHelper
@@ -135,8 +138,14 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
             }
         }
 
-        binding.notificationIc.setOnClickListener {
+        binding.leaveIcon.setOnClickListener {
             viewModel.logout()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
+        binding.profileImage.setOnClickListener {
+            startActivity(Intent(this, EditProfileActivity::class.java))
         }
     }
 
