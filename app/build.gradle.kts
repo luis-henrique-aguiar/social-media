@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.play.services.location)
     implementation(libs.material.v1110)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -30,6 +30,9 @@ class HomeViewModel : ViewModel() {
     private val _postDescription = MutableLiveData<String>()
     val postDescription: LiveData<String> get() = _postDescription
 
+    private val _location = MutableLiveData<String>("")
+    val location: LiveData<String> get() = _location
+
     private val _posts = MutableLiveData<List<Post>>()
     val posts: LiveData<List<Post>> get() = _posts
 
@@ -41,6 +44,10 @@ class HomeViewModel : ViewModel() {
 
     init {
         loadUserData()
+    }
+
+    fun updateLocation(location: String) {
+        _location.value = location
     }
 
     private fun loadUserData() {
@@ -84,7 +91,8 @@ class HomeViewModel : ViewModel() {
             "description" to description,
             "userEmail" to user.email,
             "fullName" to (_userData.value?.fullName ?: "Usuário"),
-            "username" to (_userData.value?.username ?: "Usuário")
+            "username" to (_userData.value?.username ?: "Usuário"),
+            "location" to _location.value
         )
 
         _isLoading.value = true
@@ -119,6 +127,7 @@ class HomeViewModel : ViewModel() {
                     val userEmail = document.getString("userEmail")
                     val fullName = document.getString("fullName") ?: "Usuário"
                     val username = document.getString("username") ?: "Usuário"
+                    val location = document.getString("location")
 
                     if (imageString == null || userEmail == null) {
                         completedQueries++
@@ -152,7 +161,7 @@ class HomeViewModel : ViewModel() {
                                     photo = postBitmap,
                                     fullName = fullName,
                                     userProfilePhoto = userProfilePhoto,
-                                    location = null
+                                    location = location
                                 )
                             )
 
