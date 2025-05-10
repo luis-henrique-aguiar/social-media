@@ -71,6 +71,7 @@ class EditProfileViewModel : ViewModel() {
     fun loadUserData() {
         val user = firebaseAuth.currentUser ?: return
         val email = user.email ?: return
+
         _isLoading.value = true
         db.collection("users").document(email).get()
             .addOnSuccessListener { document ->
@@ -146,15 +147,39 @@ class EditProfileViewModel : ViewModel() {
         val user = firebaseAuth.currentUser ?: return
         val email = user.email ?: return
 
+        _isLoading.value = true
         db.collection("users").document(email)
             .update(mapOf(
                 "fullName" to fullName,
                 "profilePhoto" to profilePicture
             ))
             .addOnSuccessListener {
-                _isLoading.value = false
-                _success.value = true
-                clearErrors()
+                db.collection("posts")
+                    .whereEqualTo("userEmail", email)
+                    .get()
+                    .addOnSuccessListener { posts ->
+                        val batch = db.batch()
+                        for (document in posts.documents) {
+                            batch.update(document.reference, mapOf(
+                                "fullName" to fullName,
+                                "profilePhoto" to profilePicture
+                            ))
+                        }
+                        batch.commit()
+                            .addOnSuccessListener {
+                                _isLoading.value = false
+                                _success.value = true
+                                clearErrors()
+                            }
+                            .addOnFailureListener { e ->
+                                _isLoading.value = false
+                                _fullNameError.value = "Erro ao atualizar posts: ${e.message}"
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        _isLoading.value = false
+                        _fullNameError.value = "Erro ao buscar posts: ${e.message}"
+                    }
             }
             .addOnFailureListener { e ->
                 _isLoading.value = false

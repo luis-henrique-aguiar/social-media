@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityEditProfileBinding
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
 import br.edu.ifsp.dmo2.redesocial.ui.utils.Base64Converter
+import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
 import java.io.ByteArrayOutputStream
 import java.util.Base64
 
@@ -34,6 +35,7 @@ class EditProfileActivity : AppCompatActivity() {
         setupGalleryPicker()
         setupObservers()
         setupTextWatcher()
+        setInputStyle()
     }
 
     private fun setupGalleryPicker() {
@@ -105,6 +107,7 @@ class EditProfileActivity : AppCompatActivity() {
         viewModel.success.observe(this) {
             if (it) {
                 Toast.makeText(this, "Dados atualizados com sucesso.", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, HomeActivity::class.java))
                 finish()
             }
         }
@@ -141,5 +144,13 @@ class EditProfileActivity : AppCompatActivity() {
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
         }
+    }
+
+    private fun setInputStyle() {
+        InputColorUtils.applyInputColors(
+            binding.inputNameContainer,
+            binding.inputCurrentPasswordContainer,
+            binding.inputNewPasswordContainer,
+        )
     }
 }

@@ -1,6 +1,7 @@
 package br.edu.ifsp.dmo2.redesocial.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ifsp.dmo2.redesocial.databinding.PostItemBinding
@@ -18,8 +19,14 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: PostItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(post: Post) {
-            binding.postDescription.text = post.description
-            binding.postImage.setImageBitmap(post.photo)
+            if (post.description.isNotBlank()) {
+                binding.postDescription.text = post.description
+                binding.postDescription.visibility = View.VISIBLE
+            }
+            if (post.photo != null) {
+                binding.postImage.setImageBitmap(post.photo)
+                binding.postImage.visibility = View.VISIBLE
+            }
             binding.fullName.text = post.fullName
             binding.profileImage.setImageBitmap(post.userProfilePhoto)
             binding.locale.text = post.location ?: ""

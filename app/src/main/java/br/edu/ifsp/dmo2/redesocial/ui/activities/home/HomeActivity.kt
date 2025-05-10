@@ -55,6 +55,7 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
                     contentResolver.openInputStream(uri)?.use { inputStream ->
                         val bitmap = BitmapFactory.decodeStream(inputStream)
                         val targetImageView = if (isDialogOpen && currentDialogBinding != null) {
+                            currentDialogBinding!!.addedImage.visibility = View.VISIBLE
                             currentDialogBinding!!.addedImage
                         } else {
                             binding.profileImage
@@ -119,17 +120,13 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
 
             dialogBinding.confirmButton.setOnClickListener {
                 val drawable = dialogBinding.addedImage.drawable
-                if (drawable != null) {
-                    val image = Base64Converter.drawableToString(drawable)
-                    val description = dialogBinding.inputDescription.text.toString()
-                    if (description.isNotBlank()) {
-                        viewModel.addPost(image, description)
-                        dialog.dismiss()
-                    } else {
-                        Toast.makeText(this, "Descrição não pode estar vazia", Toast.LENGTH_SHORT).show()
-                    }
+                val description = dialogBinding.inputDescription.text.toString()
+                val image = drawable?.let { Base64Converter.drawableToString(drawable) }
+                if (image != null || description.isNotBlank()) {
+                    viewModel.addPost(image, description)
+                    dialog.dismiss()
                 } else {
-                    Toast.makeText(this, "Selecione uma imagem", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Selecione uma imagem ou coloque uma descrição.", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -146,6 +143,7 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
 
         binding.profileImage.setOnClickListener {
             startActivity(Intent(this, EditProfileActivity::class.java))
+            finish()
         }
     }
 

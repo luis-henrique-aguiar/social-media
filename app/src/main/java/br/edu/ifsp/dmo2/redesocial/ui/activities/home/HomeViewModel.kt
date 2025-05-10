@@ -51,14 +51,10 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun loadUserData() {
-        val user = firebaseAuth.currentUser
-        if (user == null) {
-            _error.value = "Usuário não autenticado."
-            return
-        }
+        val user = firebaseAuth.currentUser ?: return
+        val email = user.email ?: return
 
         _isLoading.value = true
-        val email = user.email.orEmpty()
         db.collection("users").document(email).get()
             .addOnSuccessListener { document ->
                 val username = document.getString("username") ?: "Usuário"
@@ -75,119 +71,85 @@ class HomeViewModel : ViewModel() {
     }
 
     fun addPost(image: String?, description: String) {
-        if (image == null) {
-            _error.value = "Erro ao carregar a imagem"
-            return
-        }
-
-        val user = firebaseAuth.currentUser
-        if (user == null) {
-            _error.value = "Usuário não autenticado."
-            return
-        }
-
-        val postData = hashMapOf(
-            "image" to image,
-            "description" to description,
-            "userEmail" to user.email,
-            "fullName" to (_userData.value?.fullName ?: "Usuário"),
-            "username" to (_userData.value?.username ?: "Usuário"),
-            "location" to _location.value
-        )
+        val user = firebaseAuth.currentUser ?: return
+        val email = user.email ?: return
 
         _isLoading.value = true
-        db.collection("posts").add(postData)
-            .addOnSuccessListener {
-                loadPosts()
+        db.collection("users").document(email).get()
+            .addOnSuccessListener { document ->
+                val fullName = document.getString("fullName") ?: "Usuário"
+                val profilePhoto = document.getString("profilePhoto")
+                val post = mapOf(
+                    "description" to description,
+                    "image" to image,
+                    "fullName" to fullName,
+                    "profilePhoto" to profilePhoto,
+                    "location" to _location.value,
+                    "userEmail" to email
+                )
+
+                db.collection("posts").add(post)
+                    .addOnSuccessListener {
+                        _isLoading.value = false
+                        loadPosts()
+                    }
+                    .addOnFailureListener { e ->
+                        _error.value = "Erro ao adicionar post: ${e.message}"
+                        _isLoading.value = false
+                    }
             }
             .addOnFailureListener { e ->
-                _error.value = "Erro ao realizar o post: ${e.message}"
+                _error.value = "Erro ao carregar dados do usuário: ${e.message}"
                 _isLoading.value = false
             }
     }
 
     fun loadPosts() {
         _isLoading.value = true
-        val postsList = mutableListOf<Post>()
+        val posts = mutableListOf<Post>()
 
         db.collection("posts").get()
-            .addOnSuccessListener { postsResult ->
-                if (postsResult.isEmpty) {
-                    _posts.value = emptyList()
+            .addOnSuccessListener { documents ->
+                if (documents.isEmpty) {
                     _isLoading.value = false
+                    _posts.value = emptyList()
                     return@addOnSuccessListener
                 }
 
-                var completedQueries = 0
-                val totalQueries = postsResult.documents.size
-
-                for (document in postsResult.documents) {
+                for (document in documents.documents) {
                     val imageString = document.getString("image")
                     val description = document.getString("description") ?: ""
-                    val userEmail = document.getString("userEmail")
-                    val fullName = document.getString("fullName") ?: "Usuário"
+                    val email = document.getString("userEmail")
+                    val fullName = document.getString("fullName")
+                    val profilePhotoString = document.getString("profilePhoto")
                     val location = document.getString("location")
 
-                    if (imageString == null || userEmail == null) {
-                        completedQueries++
-                        if (completedQueries == totalQueries) {
-                            _posts.value = postsList
-                            _isLoading.value = false
+                    if (email != null && fullName != null) {
+                        val postBitmap = try {
+                            imageString?.let { Base64Converter.stringToBitmap(it) }
+                        } catch (e: Exception) {
+                            null
                         }
-                        continue
-                    }
 
-                    val postBitmap = Base64Converter.stringToBitmap(imageString)
-                    if (postBitmap == null) {
-                        completedQueries++
-                        if (completedQueries == totalQueries) {
-                            _posts.value = postsList
-                            _isLoading.value = false
+                        val userProfilePhoto = try {
+                            profilePhotoString?.let { Base64Converter.stringToBitmap(it) } ?: createBitmap(1, 1)
+                        } catch (e: Exception) {
+                            createBitmap(1, 1)
                         }
-                        continue
-                    }
 
-                    db.collection("users").document(userEmail).get()
-                        .addOnSuccessListener { userDocument ->
-                            val profilePhotoString = userDocument.getString("profilePhoto")
-                            val userProfilePhoto = profilePhotoString?.let {
-                                Base64Converter.stringToBitmap(it)
-                            } ?: createBitmap(1, 1)
-
-                            postsList.add(
-                                Post(
-                                    description = description,
-                                    photo = postBitmap,
-                                    fullName = fullName,
-                                    userProfilePhoto = userProfilePhoto,
-                                    location = location
-                                )
+                        posts.add(
+                            Post(
+                                description = description,
+                                photo = postBitmap,
+                                fullName = fullName,
+                                userProfilePhoto = userProfilePhoto,
+                                location = location,
+                                userEmail = email
                             )
-
-                            completedQueries++
-                            if (completedQueries == totalQueries) {
-                                _posts.value = postsList
-                                _isLoading.value = false
-                            }
-                        }
-                        .addOnFailureListener { e ->
-                            postsList.add(
-                                Post(
-                                    description = description,
-                                    photo = postBitmap,
-                                    fullName = fullName,
-                                    userProfilePhoto = createBitmap(1, 1),
-                                    location = null
-                                )
-                            )
-
-                            completedQueries++
-                            if (completedQueries == totalQueries) {
-                                _posts.value = postsList
-                                _isLoading.value = false
-                            }
-                            _error.value = "Erro ao carregar foto de perfil: ${e.message}"
-                        }
+                        )
+                    }
+                    _posts.value = posts
+                    _isLoading.value = false
                 }
             }
             .addOnFailureListener { e ->
