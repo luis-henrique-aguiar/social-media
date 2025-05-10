@@ -10,67 +10,78 @@
     tools:context=".ui.activities.home.HomeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/feed_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/gradient_header_background"
+        android:elevation="4dp"
+        android:padding="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/circular_border"
             android:contentDescription="Profile Photo"
-            app:layout_constraintEnd_toStartOf="@id/textView"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/CircularImage"
             tools:src="@tools:sample/avatars" />
 
-        <ImageView
-            android:id="@+id/notification_ic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@drawable/ic_alert"
-            app:layout_constraintBottom_toBottomOf="@+id/profile_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="@+id/profile_image"
-            app:tint="@color/white" />
-
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold_italic"
+            android:alpha="0.95"
+            android:fontFamily="@font/poppins_bold"
             android:text="Social Media"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/profile_image"
-            app:layout_constraintEnd_toStartOf="@id/notification_ic"
-            app:layout_constraintStart_toEndOf="@+id/profile_image"
-            app:layout_constraintTop_toTopOf="@+id/profile_image" />
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/profile_image"
+            app:layout_constraintEnd_toStartOf="@id/notification_container"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/profile_image"
+            app:layout_constraintTop_toTopOf="@id/profile_image" />
+
+        <FrameLayout
+            android:id="@+id/notification_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/profile_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/profile_image">
+
+            <ImageView
+                android:id="@+id/notification_ic"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/save_svgrepo_com"
+                app:tint="@color/white" />
+
+        </FrameLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feeds"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/feed_header" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_post_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="#f89b29"
         android:layout_margin="16dp"
         app:tint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
