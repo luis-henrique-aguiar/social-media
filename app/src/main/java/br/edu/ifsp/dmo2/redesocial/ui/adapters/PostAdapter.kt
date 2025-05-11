@@ -12,6 +12,12 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
     private val posts: MutableList<Post> = mutableListOf()
 
     fun updatePosts(newPosts: List<Post>) {
+        val startPosition = posts.size
+        posts.addAll(newPosts)
+        notifyItemRangeInserted(startPosition, newPosts.size)
+    }
+
+    fun clearAndAddPosts(newPosts: List<Post>) {
         posts.clear()
         posts.addAll(newPosts)
         notifyDataSetChanged()
@@ -22,10 +28,14 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
             if (post.description.isNotBlank()) {
                 binding.postDescription.text = post.description
                 binding.postDescription.visibility = View.VISIBLE
+            } else {
+                binding.postDescription.visibility = View.GONE
             }
             if (post.photo != null) {
                 binding.postImage.setImageBitmap(post.photo)
                 binding.postImage.visibility = View.VISIBLE
+            } else {
+                binding.postImage.visibility = View.GONE
             }
             binding.fullName.text = post.fullName
             binding.profileImage.setImageBitmap(post.userProfilePhoto)

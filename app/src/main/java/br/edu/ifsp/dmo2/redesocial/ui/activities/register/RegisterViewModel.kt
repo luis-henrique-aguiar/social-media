@@ -4,6 +4,7 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import br.edu.ifsp.dmo2.redesocial.ui.utils.Validator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -36,6 +37,9 @@ class RegisterViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> get() = _errorMessage
+
     fun updateEmail(newEmail: String) {
         _email.value = newEmail
     }
@@ -63,8 +67,9 @@ class RegisterViewModel : ViewModel() {
                 _isLoading.value = false
                 if (task.isSuccessful) {
                     _registerSuccess.value = true
+                    _errorMessage.value = null
                 } else {
-                    _emailError.value = when (task.exception) {
+                    _errorMessage.value = when (task.exception) {
                         is FirebaseAuthUserCollisionException -> "E-mail já está em uso."
                         is FirebaseAuthWeakPasswordException -> "A senha é muito fraca."
                         is FirebaseAuthInvalidCredentialsException -> "E-mail inválido"
@@ -74,60 +79,24 @@ class RegisterViewModel : ViewModel() {
             }
     }
 
+    private fun validateEmail(email: String): Boolean {
+        _emailError.value = Validator.validateEmail(email)
+        return _emailError.value == null
+    }
+
+    private fun validatePassword(password: String): Boolean {
+        _passwordError.value = Validator.validatePassword(password)
+        return _passwordError.value == null
+    }
+
+    private fun validateConfirmPassword(confirmPassword: String): Boolean {
+        _confirmPasswordError.value = Validator.validateConfirmPassword(_password.value.orEmpty(), confirmPassword)
+        return _confirmPasswordError.value == null
+    }
+
     fun clearErrors() {
         _emailError.value = null
         _passwordError.value = null
         _confirmPasswordError.value = null
-    }
-
-    private fun validateEmail(email: String): Boolean {
-        return when {
-            email.isBlank() -> {
-                _emailError.value = "Preencha o campo de e-mail"
-                false
-            }
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                _emailError.value = "E-mail inválido"
-                false
-            }
-            else -> {
-                _emailError.value = null
-                true
-            }
-        }
-    }
-
-    private fun validatePassword(password: String): Boolean {
-        return when {
-            password.isBlank() -> {
-                _passwordError.value = "Preencha a senha"
-                false
-            }
-            password.length < 6 -> {
-                _passwordError.value = "A senha deve ter pelo menos 6 caracteres."
-                false
-            }
-            else -> {
-                _passwordError.value = null
-                true
-            }
-        }
-    }
-
-    private fun validateConfirmPassword(confirmPassword: String): Boolean {
-        return when {
-            confirmPassword.isBlank() -> {
-                _confirmPasswordError.value = "Preencha o campo de confirmação de senha."
-                false
-            }
-            confirmPassword != _password.value -> {
-                _confirmPasswordError.value = "As senhas não são iguais"
-                false
-            }
-            else -> {
-                _confirmPasswordError.value = null
-                true
-            }
-        }
     }
 }

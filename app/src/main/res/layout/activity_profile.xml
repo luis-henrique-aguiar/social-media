@@ -20,8 +20,8 @@
 
     <FrameLayout
         android:id="@+id/profile_image_container"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +29,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:clickable="true"
             android:contentDescription="Profile Photo"
             android:src="@drawable/ic_person"
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold_italic"
             android:hint="Username"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:textColor="#FFF"
             android:textColorHint="#FFF" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -136,7 +136,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold_italic"
             android:hint="Nome Completo"
-            android:inputType="textEmailAddress"
+            android:inputType="textPersonName"
             android:textColor="#FFF"
             android:textColorHint="#FFF" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -166,13 +166,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.38" />
+        app:layout_constraintGuide_percent="0.41" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
+        app:layout_constraintGuide_percent="0.85" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

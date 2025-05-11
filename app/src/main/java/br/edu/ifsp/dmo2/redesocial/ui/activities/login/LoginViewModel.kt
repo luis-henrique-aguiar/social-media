@@ -1,9 +1,9 @@
 package br.edu.ifsp.dmo2.redesocial.ui.activities.login
 
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import br.edu.ifsp.dmo2.redesocial.ui.utils.Validator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -68,33 +68,18 @@ class LoginViewModel : ViewModel() {
         _passwordError.value = null
     }
 
-    private fun validateEmail(email: String): Boolean {
-        return when {
-            email.isBlank() -> {
-                _emailError.value = "Preencha o campo de e-mail"
-                false
-            }
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                _emailError.value = "E-mail inválido"
-                false
-            }
-            else -> {
-                _emailError.value = null
-                true
-            }
-        }
-    }
-
     private fun validatePassword(password: String): Boolean {
         return when {
             password.isBlank() -> {
-                _passwordError.value = "Preencha o campo de senha"
+                _passwordError.value = "A senha não pode ser vazia"
                 false
             }
-            else -> {
-                _passwordError.value = null
-                true
-            }
+            else -> true
         }
+    }
+
+    private fun validateEmail(email: String): Boolean {
+        _emailError.value = Validator.validateEmail(email)
+        return _emailError.value == null
     }
 }

@@ -3,6 +3,7 @@ package br.edu.ifsp.dmo2.redesocial.ui.activities.edit
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,12 +14,16 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityEditProfileBinding
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
 import br.edu.ifsp.dmo2.redesocial.ui.utils.Base64Converter
 import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
 import java.io.ByteArrayOutputStream
 import java.util.Base64
+import androidx.core.graphics.createBitmap
+import com.google.android.material.textfield.TextInputEditText
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -34,7 +39,7 @@ class EditProfileActivity : AppCompatActivity() {
         setupOnClickListeners()
         setupGalleryPicker()
         setupObservers()
-        setupTextWatcher()
+        setupTextWatchers()
         setInputStyle()
     }
 
@@ -61,30 +66,21 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupTextWatcher() {
-        binding.inputName.addTextChangedListener(object : TextWatcher {
+    private fun setupTextWatcher(input: TextInputEditText, updateFunc: (String) -> Unit) {
+        input.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                viewModel.updateFullName(s.toString())
+                updateFunc(s.toString())
+                viewModel.clearErrors()
             }
         })
+    }
 
-        binding.inputCurrentPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.updateCurrentPassword(s.toString())
-            }
-        })
-
-        binding.inputNewPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.updateNewPassword(s.toString())
-            }
-        })
+    private fun setupTextWatchers() {
+        setupTextWatcher(binding.inputName) { viewModel.updateFullName(it) }
+        setupTextWatcher(binding.inputCurrentPassword) { viewModel.updateCurrentPassword(it) }
+        setupTextWatcher(binding.inputNewPassword) { viewModel.updateNewPassword(it) }
     }
 
     private fun setupObservers() {
@@ -121,7 +117,10 @@ class EditProfileActivity : AppCompatActivity() {
                         binding.profileImage.setImageBitmap(Base64Converter.stringToBitmap(profileImage))
                     } catch (e: Exception) {
                         Toast.makeText(this, "Erro ao carregar imagem do perfil: ${e.message}", Toast.LENGTH_LONG).show()
+                        setDefaultProfileImage()
                     }
+                } else {
+                    setDefaultProfileImage()
                 }
             }
         }
@@ -152,5 +151,15 @@ class EditProfileActivity : AppCompatActivity() {
             binding.inputCurrentPasswordContainer,
             binding.inputNewPasswordContainer,
         )
+    }
+
+    private fun setDefaultProfileImage() {
+        val iconResource = R.drawable.user_empty
+        val vectorDrawable = VectorDrawableCompat.create(resources, iconResource, null)
+        val bitmap = createBitmap(200, 200)
+        val canvas = Canvas(bitmap)
+        vectorDrawable?.setBounds(0, 0, canvas.width, canvas.height)
+        vectorDrawable?.draw(canvas)
+        binding.profileImage.setImageBitmap(bitmap)
     }
 }

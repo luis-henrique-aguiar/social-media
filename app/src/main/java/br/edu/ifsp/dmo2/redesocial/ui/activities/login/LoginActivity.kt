@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityLoginBinding
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
 import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
+import com.google.android.material.textfield.TextInputEditText
 
 class LoginActivity : AppCompatActivity() {
 
@@ -64,28 +65,19 @@ class LoginActivity : AppCompatActivity() {
         )
     }
 
+    private fun setupTextWatcher(input: TextInputEditText, updateFunc: (String) -> Unit) {
+        input.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                updateFunc(s.toString())
+                viewModel.clearErrors()
+            }
+        })
+    }
+
     private fun setupTextWatchers() {
-        binding.inputEmail.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.updateEmail(s.toString())
-            }
-        })
-
-        binding.inputPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.updatePassword(s.toString())
-            }
-        })
-
-        binding.inputEmail.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) viewModel.clearErrors()
-        }
-        binding.inputPassword.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) viewModel.clearErrors()
-        }
+        setupTextWatcher(binding.inputEmail) { viewModel.updateEmail(it) }
+        setupTextWatcher(binding.inputPassword) { viewModel.updatePassword(it) }
     }
 }

@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
 import android.location.Address
 import android.os.Bundle
 import android.view.View
@@ -14,7 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.createBitmap
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityHomeBinding
 import br.edu.ifsp.dmo2.redesocial.databinding.AddPostBinding
@@ -40,7 +45,7 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.loadPosts()
+        viewModel.resetPagination()
 
         setupGalleryPicker()
         setupRecyclerView()
@@ -77,23 +82,63 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
         adapter = PostAdapter()
         binding.feeds.layoutManager = LinearLayoutManager(this)
         binding.feeds.adapter = adapter
+
+        binding.feeds.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy <= 0) return
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+
+                val shouldLoadMore = !viewModel.isLoading.value!! &&
+                        !viewModel.isLastPage.value!! &&
+                        (visibleItemCount + firstVisibleItem) >= totalItemCount &&
+                        totalItemCount >= 5
+
+                if (shouldLoadMore) {
+                    viewModel.loadMorePosts()
+                }
+            }
+        })
     }
 
     private fun setupObservers() {
         viewModel.userData.observe(this) { userData ->
-            userData.profilePhoto?.let { binding.profileImage.setImageBitmap(it) }
+            userData.profilePhoto?.let { binding.profileImage.setImageBitmap(it) } ?: setDefaultProfileImage()
         }
 
-        viewModel.posts.observe(this) {
-            adapter.updatePosts(it)
+        viewModel.posts.observe(this) { posts ->
+            adapter.updatePosts(posts)
         }
 
         viewModel.isLoading.observe(this) {
             binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
 
-        viewModel.error.observe(this) {
-            it?.let { Toast.makeText(this, it, Toast.LENGTH_LONG).show() }
+        viewModel.error.observe(this) { error ->
+            error?.let {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.posts.observe(this) { posts ->
+            if (viewModel.isLastPage.value == true && posts.size == adapter.itemCount) {
+                return@observe
+            }
+
+            if (adapter.itemCount == 0 || posts.size <= adapter.itemCount) {
+                adapter.clearAndAddPosts(posts)
+            } else {
+                adapter.updatePosts(posts.subList(adapter.itemCount, posts.size))
+            }
+        }
+
+        viewModel.isLastPage.observe(this) { isLastPage ->
+            if (isLastPage) {
+                Toast.makeText(this, "Fim das postagens.", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -154,20 +199,14 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
     }
 
     private fun requestLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(this, "A localização é necessária para adicionar a cidade ao post.", Toast.LENGTH_LONG).show()
+            }
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         } else {
@@ -186,7 +225,6 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
             permissions,
             grantResults
         )
-
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             requestLocation()
         } else {
@@ -194,7 +232,14 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
         }
     }
 
-    override fun onError(message: String) {
+    private fun setDefaultProfileImage() {
+        val bitmap = createBitmap(100, 100)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(Color.LTGRAY)
+        binding.profileImage.setImageBitmap(bitmap)
+    }
 
+    override fun onError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

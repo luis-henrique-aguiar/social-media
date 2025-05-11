@@ -40,7 +40,6 @@
                 android:layout_marginTop="12dp"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
-                android:src="@drawable/empty_image"
                 app:layout_constraintDimensionRatio="16:9"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

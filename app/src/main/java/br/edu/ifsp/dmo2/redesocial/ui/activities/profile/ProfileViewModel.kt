@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.edu.ifsp.dmo2.redesocial.ui.utils.Base64Converter
+import br.edu.ifsp.dmo2.redesocial.ui.utils.Validator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
@@ -26,13 +27,16 @@ class ProfileViewModel : ViewModel() {
     private val _fullNameError = MutableLiveData<String?>()
     val fullNameError: LiveData<String?> get() = _fullNameError
 
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> get() = _errorMessage
+
     private val _registerSuccess = MutableLiveData<Boolean>()
     val registerSuccess: LiveData<Boolean> get() = _registerSuccess
 
     private val _selectedBitmap = MutableLiveData<Bitmap?>()
     val selectedBitmap: LiveData<Bitmap?> get() = _selectedBitmap
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     private val _email = MutableLiveData<String>()
@@ -61,7 +65,7 @@ class ProfileViewModel : ViewModel() {
 
         val currentUser = firebaseAuth.currentUser
         if (currentUser == null || currentUser.email != email) {
-            _usernameError.value = "Usuário não autenticado ou e-mail inválido."
+            _errorMessage.value = "Usuário não autenticado ou e-mail inválido."
             return
         }
 
@@ -70,19 +74,7 @@ class ProfileViewModel : ViewModel() {
         }
 
         _isLoading.value = true
-        db.collection("usernames").document(username).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    _usernameError.value = "Este username já está em uso."
-                    _isLoading.value = false
-                } else {
-                    saveUserData(email, username, fullName)
-                }
-            }
-            .addOnFailureListener { e ->
-                _usernameError.value = "Erro ao verificar username: ${e.message}"
-                _isLoading.value = false
-            }
+        saveUserData(email, username, fullName)
     }
 
     private fun saveUserData(email: String, username: String, fullName: String) {
@@ -107,43 +99,19 @@ class ProfileViewModel : ViewModel() {
             _registerSuccess.value = true
             _isLoading.value = false
         }.addOnFailureListener { e ->
-            _usernameError.value = "Erro ao salvar dados: ${e.message}"
+            _errorMessage.value = "Erro ao salvar dados: ${e.message}"
             _isLoading.value = false
         }
     }
 
     private fun validateFullName(fullName: String): Boolean {
-        return when {
-            fullName.isBlank() -> {
-                _fullNameError.value = "Preencha o campo de nome."
-                false
-            }
-            !fullName.all { it.isLetter() || it.isWhitespace() } -> {
-                _fullNameError.value = "O nome deve conter paenas letras e espaços."
-                false
-            }
-            else -> {
-                _fullNameError.value = null
-                true
-            }
-        }
+        _fullNameError.value = Validator.validateFullName(fullName)
+        return _fullNameError.value == null
     }
 
     private fun validateUsername(username: String): Boolean {
-        return when {
-            username.isBlank() -> {
-                _usernameError.value = "Preencha o campo de username."
-                false
-            }
-            !Regex("^[A-Za-z0-9_]+$").matches(username) -> {
-                _usernameError.value = "O nome de usuário deve conter apenas letras, números e sublinados."
-                false
-            }
-            else -> {
-                _usernameError.value = null
-                true
-            }
-        }
+        _usernameError.value = Validator.validateUsername(username)
+        return _usernameError.value == null
     }
 
     private fun convertImageToBase64(): String {

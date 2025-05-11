@@ -1,6 +1,7 @@
 package br.edu.ifsp.dmo2.redesocial.ui.activities.profile
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -9,12 +10,17 @@ import androidx.appcompat.app.AppCompatActivity
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityProfileBinding
 import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
+import androidx.core.graphics.createBitmap
+import com.google.android.material.textfield.TextInputEditText
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -33,6 +39,7 @@ class ProfileActivity : AppCompatActivity() {
         setupTextWatcher()
         setupGalleryPicker()
         setOnClickListener()
+        setDefaultProfileImage()
     }
 
     private fun setupGalleryPicker() {
@@ -87,26 +94,20 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupTextWatcher(input: TextInputEditText, updateFunc: (String) -> Unit) {
+        input.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                updateFunc(s.toString())
+                viewModel.clearErrors()
+            }
+        })
+    }
+
     private fun setupTextWatcher() {
-        binding.inputName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.updateFullName(s.toString())
-                viewModel.clearErrors()
-            }
-        })
-
-        binding.inputUsername.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.updateUsername(s.toString())
-                viewModel.clearErrors()
-            }
-        })
+        setupTextWatcher(binding.inputName) { viewModel.updateFullName(it) }
+        setupTextWatcher(binding.inputUsername) { viewModel.updateUsername(it) }
     }
 
     private fun setInputStyle() {
@@ -121,12 +122,6 @@ class ProfileActivity : AppCompatActivity() {
             viewModel.register()
         }
 
-        binding.profileImage.setOnClickListener {
-            gallery.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-            )
-        }
-
         binding.editIcon.setOnClickListener {
             gallery.launch(
                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -136,5 +131,10 @@ class ProfileActivity : AppCompatActivity() {
         binding.arrowBack.setOnClickListener {
             finish()
         }
+    }
+
+    private fun setDefaultProfileImage() {
+        binding.profileImage.setImageResource(R.drawable.user_empty)
+        viewModel.updateSelectedBitmap(null)
     }
 }
