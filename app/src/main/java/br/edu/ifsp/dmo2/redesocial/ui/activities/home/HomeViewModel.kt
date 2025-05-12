@@ -1,6 +1,7 @@
 package br.edu.ifsp.dmo2.redesocial.ui.activities.home
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.edu.ifsp.dmo2.redesocial.model.Post
@@ -88,6 +89,11 @@ class HomeViewModel : ViewModel() {
     fun addPost(image: String?, description: String) {
         val user = firebaseAuth.currentUser ?: return
         val email = user.email ?: return
+        val splitedLocation = _location.value?.split(",")
+        val city = when {
+            splitedLocation.isNullOrEmpty() -> ""
+            else -> splitedLocation.first()
+        }
 
         _isLoading.value = true
         db.collection("users").document(email).get()
@@ -100,6 +106,7 @@ class HomeViewModel : ViewModel() {
                     "fullName" to fullName,
                     "profilePhoto" to profilePhoto,
                     "location" to _location.value,
+                    "city" to city,
                     "userEmail" to email,
                     "createdAt" to FieldValue.serverTimestamp(),
                     "username" to _userData.value?.username
@@ -219,5 +226,31 @@ class HomeViewModel : ViewModel() {
 
     private fun generateDefaultProfileBitmap(): Bitmap {
         return Base64Converter.getDefaultBitmap()
+    }
+
+    fun filterByLocation(city: String) {
+        if (isLoading.value == true) return
+
+        _isLoading.value = true
+        db.collection("posts")
+            .whereEqualTo("city", city)
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { documents ->
+                try {
+                    val newPosts = processDocuments(documents)
+                    resetPagination()
+                    _posts.value = newPosts
+                    Log.v("Lista", newPosts.toString())
+                    _isLoading.value = false
+                } catch (e: Exception) {
+                    _error.value = "Erro ao processar posts"
+                    _isLoading.value = false
+                }
+            }
+            .addOnFailureListener { e ->
+                _error.value = "Erro ao carregar posts: ${e.message}"
+                _isLoading.value = false
+            }
     }
 }

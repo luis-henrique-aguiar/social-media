@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityHomeBinding
+import br.edu.ifsp.dmo2.redesocial.databinding.AddLocationBinding
 import br.edu.ifsp.dmo2.redesocial.databinding.AddPostBinding
 import br.edu.ifsp.dmo2.redesocial.ui.activities.edit.EditProfileActivity
 import br.edu.ifsp.dmo2.redesocial.ui.activities.login.LoginActivity
@@ -37,6 +38,8 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
     private var isDialogOpen = false
     private var currentDialogBinding: AddPostBinding? = null
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
+    private var currentDialogLocationBinding: AddLocationBinding? = null
+    private var isLocationDialogOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,6 +181,35 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
             }
         }
 
+        binding.addLocation.setOnClickListener {
+            val dialogBinding = AddLocationBinding.inflate(layoutInflater)
+
+            isLocationDialogOpen = true
+            currentDialogLocationBinding = dialogBinding
+
+            val dialog = MaterialAlertDialogBuilder(this, R.style.CustomDialogTheme)
+                .setView(dialogBinding.root)
+                .setOnDismissListener {
+                    isLocationDialogOpen = false
+                    currentDialogLocationBinding = null
+                }
+                .show()
+
+            dialogBinding.confirmButton.setOnClickListener {
+                val location = dialogBinding.inputLocation.text.toString()
+                if (location.isNotBlank()) {
+                    viewModel.filterByLocation(location)
+                    dialog.dismiss()
+                } else {
+                    viewModel.loadPosts()
+                }
+            }
+
+            dialogBinding.cancelButton.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
         binding.leaveIcon.setOnClickListener {
             viewModel.logout()
             startActivity(Intent(this, LoginActivity::class.java))
@@ -185,6 +217,11 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
             Handler(Looper.getMainLooper()).postDelayed({
                 finish()
             }, 300)
+        }
+
+        binding.refresh.setOnClickListener {
+            viewModel.resetPagination()
+            viewModel.loadPosts()
         }
 
         binding.profileImage.setOnClickListener {
