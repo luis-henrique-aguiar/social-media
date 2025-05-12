@@ -3,6 +3,7 @@ package br.edu.ifsp.dmo2.redesocial.ui.activities.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import br.edu.ifsp.dmo2.redesocial.ui.utils.Validator
 import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -49,21 +50,18 @@ class EditProfileViewModel : ViewModel() {
 
     fun updateFullName(fullName: String) {
         _fullName.value = fullName
-        validateFullName(fullName)
     }
 
     fun updateCurrentPassword(password: String) {
         _currentPassword.value = password
-        validateCurrentPassword(password)
     }
 
     fun updateNewPassword(newPassword: String) {
         _newPassword.value = newPassword
-        validateNewPassword(newPassword)
     }
 
     fun updateProfilePicture(profilePicture: String) {
-        if (profilePicture.isNotEmpty()) {
+        if (profilePicture.isNotBlank()) {
             _profilePicture.value = profilePicture
         }
     }
@@ -75,8 +73,7 @@ class EditProfileViewModel : ViewModel() {
         _isLoading.value = true
         db.collection("users").document(email).get()
             .addOnSuccessListener { document ->
-                val fullName = document.getString("fullName") ?: ""
-                _fullName.value = fullName
+                _fullName.value = document.getString("fullName") ?: ""
                 _profilePicture.value = document.getString("profilePhoto")
                 _isLoading.value = false
                 _dataLoaded.value = true
@@ -189,53 +186,17 @@ class EditProfileViewModel : ViewModel() {
     }
 
     private fun validateFullName(fullName: String): Boolean {
-        return when {
-            fullName.isBlank() -> {
-                _fullNameError.value = "Preencha o campo de nome."
-                false
-            }
-            !fullName.all { it.isLetter() || it.isWhitespace() } -> {
-                _fullNameError.value = "O nome deve conter paenas letras e espaços."
-                false
-            }
-            else -> {
-                _fullNameError.value = null
-                true
-            }
-        }
+       _fullNameError.value = Validator.validateFullName(fullName)
+        return _fullNameError.value == null
     }
 
     private fun validateCurrentPassword(password: String): Boolean {
-        return when {
-            password.isBlank() -> {
-                _currentPasswordError.value = "Preencha a senha"
-                false
-            }
-            password.length < 6 -> {
-                _currentPasswordError.value = "A senha deve ter pelo menos 6 caracteres."
-                false
-            }
-            else -> {
-                _currentPasswordError.value = null
-                true
-            }
-        }
+        _currentPasswordError.value = Validator.validatePassword(password)
+        return _currentPasswordError.value == null
     }
 
     private fun validateNewPassword(password: String): Boolean {
-        return when {
-            password.isBlank() -> {
-                _newPasswordError.value = "Preencha a senha"
-                false
-            }
-            password.length < 6 -> {
-                _newPasswordError.value = "A senha deve ter pelo menos 6 caracteres."
-                false
-            }
-            else -> {
-                _newPasswordError.value = null
-                true
-            }
-        }
+        _newPasswordError.value = Validator.validatePassword(password)
+        return _newPasswordError.value == null
     }
 }

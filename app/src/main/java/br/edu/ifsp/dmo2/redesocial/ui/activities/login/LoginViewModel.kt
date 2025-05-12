@@ -31,12 +31,10 @@ class LoginViewModel : ViewModel() {
 
     fun updateEmail(newEmail: String) {
         _email.value = newEmail
-        validateEmail(newEmail)
     }
 
     fun updatePassword(newPassword: String) {
         _password.value = newPassword
-        validatePassword(newPassword)
     }
 
     fun login() {

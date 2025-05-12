@@ -1,7 +1,6 @@
 package br.edu.ifsp.dmo2.redesocial.ui.activities.profile
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -10,16 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityProfileBinding
 import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
-import androidx.core.graphics.createBitmap
 import com.google.android.material.textfield.TextInputEditText
 
 class ProfileActivity : AppCompatActivity() {

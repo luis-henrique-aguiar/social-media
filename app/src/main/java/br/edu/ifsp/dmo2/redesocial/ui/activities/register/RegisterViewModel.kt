@@ -1,6 +1,5 @@
 package br.edu.ifsp.dmo2.redesocial.ui.activities.register
 
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -79,6 +78,12 @@ class RegisterViewModel : ViewModel() {
             }
     }
 
+    fun clearErrors() {
+        _emailError.value = null
+        _passwordError.value = null
+        _confirmPasswordError.value = null
+    }
+
     private fun validateEmail(email: String): Boolean {
         _emailError.value = Validator.validateEmail(email)
         return _emailError.value == null
@@ -92,11 +97,5 @@ class RegisterViewModel : ViewModel() {
     private fun validateConfirmPassword(confirmPassword: String): Boolean {
         _confirmPasswordError.value = Validator.validateConfirmPassword(_password.value.orEmpty(), confirmPassword)
         return _confirmPasswordError.value == null
-    }
-
-    fun clearErrors() {
-        _emailError.value = null
-        _passwordError.value = null
-        _confirmPasswordError.value = null
     }
 }

@@ -1,9 +1,7 @@
 package br.edu.ifsp.dmo2.redesocial.ui.activities.edit
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,15 +12,10 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
-import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityEditProfileBinding
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
 import br.edu.ifsp.dmo2.redesocial.ui.utils.Base64Converter
 import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
-import java.io.ByteArrayOutputStream
-import java.util.Base64
-import androidx.core.graphics.createBitmap
 import com.google.android.material.textfield.TextInputEditText
 
 class EditProfileActivity : AppCompatActivity() {
@@ -50,10 +43,8 @@ class EditProfileActivity : AppCompatActivity() {
                     contentResolver.openInputStream(uri)?.use { inputStream ->
                         val bitmap = BitmapFactory.decodeStream(inputStream)
                         binding.profileImage.setImageBitmap(bitmap)
-                        val baos = ByteArrayOutputStream()
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
-                        val base64String = Base64.getEncoder().encodeToString(baos.toByteArray())
-                        viewModel.updateProfilePicture(base64String)
+                        val imageString = Base64Converter.bitmapToString(bitmap)
+                        viewModel.updateProfilePicture(imageString)
                     } ?: run {
                         Toast.makeText(this, "Erro ao carregar imagem", Toast.LENGTH_LONG).show()
                     }
@@ -127,10 +118,6 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun setupOnClickListeners() {
-        binding.profileImage.setOnClickListener {
-            gallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
         binding.editIcon.setOnClickListener {
             gallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
@@ -154,12 +141,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun setDefaultProfileImage() {
-        val iconResource = R.drawable.user_empty
-        val vectorDrawable = VectorDrawableCompat.create(resources, iconResource, null)
-        val bitmap = createBitmap(200, 200)
-        val canvas = Canvas(bitmap)
-        vectorDrawable?.setBounds(0, 0, canvas.width, canvas.height)
-        vectorDrawable?.draw(canvas)
+        val bitmap = Base64Converter.getDefaultBitmap()
         binding.profileImage.setImageBitmap(bitmap)
     }
 }

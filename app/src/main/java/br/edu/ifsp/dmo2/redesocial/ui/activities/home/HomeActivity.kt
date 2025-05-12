@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.graphics.createBitmap
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityHomeBinding
 import br.edu.ifsp.dmo2.redesocial.databinding.AddPostBinding
@@ -233,9 +232,7 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
     }
 
     private fun setDefaultProfileImage() {
-        val bitmap = createBitmap(100, 100)
-        val canvas = Canvas(bitmap)
-        canvas.drawColor(Color.LTGRAY)
+        val bitmap = Base64Converter.getDefaultBitmap()
         binding.profileImage.setImageBitmap(bitmap)
     }
 

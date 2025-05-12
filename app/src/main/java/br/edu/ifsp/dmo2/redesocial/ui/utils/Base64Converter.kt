@@ -3,6 +3,7 @@ package br.edu.ifsp.dmo2.redesocial.ui.utils
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Base64
@@ -41,5 +42,12 @@ object Base64Converter {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
+    fun getDefaultBitmap(): Bitmap {
+        val bitmap = createBitmap(100, 100)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(Color.LTGRAY)
+        return bitmap
     }
 }

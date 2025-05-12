@@ -77,6 +77,11 @@ class ProfileViewModel : ViewModel() {
         saveUserData(email, username, fullName)
     }
 
+    fun clearErrors() {
+        _usernameError.value = null
+        _fullNameError.value = null
+    }
+
     private fun saveUserData(email: String, username: String, fullName: String) {
         val profilePhotoString = convertImageToBase64()
         val data = hashMapOf(
@@ -118,10 +123,5 @@ class ProfileViewModel : ViewModel() {
         return _selectedBitmap.value?.let { bitmap ->
             Base64Converter.bitmapToString(bitmap)
         } ?: ""
-    }
-
-    fun clearErrors() {
-        _usernameError.value = null
-        _fullNameError.value = null
     }
 }

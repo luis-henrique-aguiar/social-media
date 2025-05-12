@@ -1,8 +1,6 @@
 package br.edu.ifsp.dmo2.redesocial.ui.activities.home
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.edu.ifsp.dmo2.redesocial.model.Post
@@ -14,7 +12,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
-import androidx.core.graphics.createBitmap
 
 data class UserData(
     val username: String = "Usuário",
@@ -218,9 +215,6 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun generateDefaultProfileBitmap(): Bitmap {
-        val bitmap = createBitmap(100, 100)
-        val canvas = Canvas(bitmap)
-        canvas.drawColor(Color.LTGRAY)
-        return bitmap
+        return Base64Converter.getDefaultBitmap()
     }
 }
