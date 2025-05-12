@@ -8,9 +8,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterViewModel : ViewModel() {
     private val firebaseAuth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     private val _email = MutableLiveData("")
     val email: LiveData<String> get() = _email
@@ -63,11 +66,10 @@ class RegisterViewModel : ViewModel() {
         _isLoading.value = true
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                _isLoading.value = false
                 if (task.isSuccessful) {
-                    _registerSuccess.value = true
-                    _errorMessage.value = null
+                    saveUserData(email)
                 } else {
+                    _isLoading.value = false
                     _errorMessage.value = when (task.exception) {
                         is FirebaseAuthUserCollisionException -> "E-mail já está em uso."
                         is FirebaseAuthWeakPasswordException -> "A senha é muito fraca."
@@ -76,6 +78,35 @@ class RegisterViewModel : ViewModel() {
                     }
                 }
             }
+    }
+
+    private fun saveUserData(email: String) {
+        val user = firebaseAuth.currentUser
+        val userData = hashMapOf(
+            "email" to email,
+            "createdAt" to FieldValue.serverTimestamp(),
+            "username" to generateDefaultUsername(email),
+            "profilePhoto" to null,
+            "fullName" to ""
+        )
+
+        db.collection("users").document(email)
+            .set(userData)
+            .addOnSuccessListener {
+                _registerSuccess.value = true
+                _errorMessage.value = null
+                _isLoading.value = false
+            }
+            .addOnFailureListener { e ->
+                _isLoading.value = false
+                _errorMessage.value = "Erro ao salvar dados do usuário: ${e.message}"
+                user?.delete()
+            }
+    }
+
+    private fun generateDefaultUsername(email: String): String {
+        return email.substringBefore("@").takeIf { it.isNotBlank() }
+            ?: "user_${System.currentTimeMillis()}"
     }
 
     fun clearErrors() {

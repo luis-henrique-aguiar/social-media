@@ -21,9 +21,6 @@
             android:name=".ui.activities.edit.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".PostActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activities.profile.ProfileActivity"
             android:exported="false" />
         <activity

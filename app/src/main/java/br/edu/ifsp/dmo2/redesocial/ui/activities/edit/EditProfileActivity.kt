@@ -3,6 +3,8 @@ package br.edu.ifsp.dmo2.redesocial.ui.activities.edit
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,6 +14,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityEditProfileBinding
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
 import br.edu.ifsp.dmo2.redesocial.ui.utils.Base64Converter
@@ -128,7 +131,10 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding.arrowBack.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))
-            finish()
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            Handler(Looper.getMainLooper()).postDelayed({
+                finish()
+            }, 300)
         }
     }
 

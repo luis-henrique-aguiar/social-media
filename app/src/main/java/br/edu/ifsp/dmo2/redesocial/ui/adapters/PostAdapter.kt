@@ -39,7 +39,11 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
             }
             binding.fullName.text = post.fullName
             binding.profileImage.setImageBitmap(post.userProfilePhoto)
-            binding.locale.text = post.location ?: "@${post.username}"
+            binding.locale.text = when {
+                !post.location.isNullOrBlank() -> post.location
+                post.username.isNotBlank() -> "@${post.username}"
+                else -> ""
+            }
         }
     }
 

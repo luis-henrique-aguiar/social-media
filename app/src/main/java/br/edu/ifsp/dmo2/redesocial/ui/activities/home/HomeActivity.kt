@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.Address
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -179,12 +181,18 @@ class HomeActivity : AppCompatActivity(), LocationHelper.Callback {
         binding.leaveIcon.setOnClickListener {
             viewModel.logout()
             startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            Handler(Looper.getMainLooper()).postDelayed({
+                finish()
+            }, 300)
         }
 
         binding.profileImage.setOnClickListener {
             startActivity(Intent(this, EditProfileActivity::class.java))
-            finish()
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            Handler(Looper.getMainLooper()).postDelayed({
+                finish()
+            }, 300)
         }
     }
 

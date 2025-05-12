@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityProfileBinding
 import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
 import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -65,6 +67,7 @@ class ProfileActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Erro: E-mail não fornecido", Toast.LENGTH_LONG).show()
             finish()
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
     }
 
@@ -80,7 +83,10 @@ class ProfileActivity : AppCompatActivity() {
         viewModel.registerSuccess.observe(this) {
             if (it) {
                 startActivity(Intent(this, HomeActivity::class.java))
-                finish()
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    finish()
+                }, 300)
             }
         }
 
@@ -126,6 +132,7 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.arrowBack.setOnClickListener {
             finish()
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
     }
 

@@ -2,8 +2,11 @@ package br.edu.ifsp.dmo2.redesocial.ui.activities.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityMainBinding
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
 import br.edu.ifsp.dmo2.redesocial.ui.activities.login.LoginActivity
@@ -26,7 +29,10 @@ class MainActivity : AppCompatActivity() {
         viewModel.isLogged.observe(this) {
             if (it) {
                 startActivity(Intent(this, HomeActivity::class.java))
-                finish()
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    finish()
+                }, 300)
             }
         }
     }
@@ -34,10 +40,12 @@ class MainActivity : AppCompatActivity() {
     private fun setOnClickListener() {
         binding.loginButton.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         binding.registerButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
     }
 }

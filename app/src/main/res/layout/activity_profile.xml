@@ -20,8 +20,8 @@
 
     <FrameLayout
         android:id="@+id/profile_image_container"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,16 +29,16 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_image"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:clickable="true"
             android:contentDescription="Profile Photo"
-            android:src="@drawable/ic_person"
+            android:src="@drawable/user_empty"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/CircularImage"
-            tools:src="@tools:sample/avatars" />
+             />
 
         <ImageView
             android:id="@+id/edit_icon"
@@ -60,10 +60,10 @@
         style="@style/CustomHeadline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/poppins_bold_italic"
         android:letterSpacing="0.02"
         android:layout_marginTop="20dp"
-        android:text="Adicione suas informações"
+        android:text="Informações adicionais"
         android:textColor="#FFFFFF"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -166,7 +166,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.41" />
+        app:layout_constraintGuide_percent="0.38" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"

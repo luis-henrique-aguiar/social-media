@@ -45,7 +45,8 @@
                 android:fontFamily="@font/poppins_bold"
                 android:text="Luis Henrique"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toTopOf="@id/locale"
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
                 app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
@@ -55,9 +56,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_light_italic"
                 android:text="Santa Lúcia, Brasil"
-                android:layout_marginTop="5dp"
                 android:textColor="#666666"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/fullName"
                 app:layout_constraintTop_toBottomOf="@+id/fullName" />
 
@@ -106,8 +106,8 @@
 
             <ImageView
                 android:id="@+id/ic_heart"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/heart_2"
                 android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -116,8 +116,8 @@
 
             <ImageView
                 android:id="@+id/ic_chat"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="16dp"
                 android:src="@drawable/chat_round_svgrepo_com"
                 app:layout_constraintBottom_toBottomOf="@+id/ic_heart"
@@ -127,8 +127,8 @@
 
             <ImageView
                 android:id="@+id/ic_plane"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="16dp"
                 android:src="@drawable/paper_plane_svgrepo_com"
                 app:layout_constraintBottom_toBottomOf="@+id/ic_heart"
@@ -138,8 +138,8 @@
 
             <ImageView
                 android:id="@+id/ic_save"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/save_svgrepo_com"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ic_heart"

@@ -2,13 +2,17 @@ package br.edu.ifsp.dmo2.redesocial.ui.activities.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityLoginBinding
 import br.edu.ifsp.dmo2.redesocial.ui.activities.home.HomeActivity
+import br.edu.ifsp.dmo2.redesocial.ui.activities.main.MainActivity
 import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
 import com.google.android.material.textfield.TextInputEditText
 
@@ -39,7 +43,10 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel.success.observe(this) {
             startActivity(Intent(this, HomeActivity::class.java))
-            finish()
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            Handler(Looper.getMainLooper()).postDelayed({
+                finish()
+            }, 300)
         }
 
         viewModel.isLoading.observe(this) { isLoading ->
@@ -54,7 +61,11 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.arrowBack.setOnClickListener {
-            finish()
+            startActivity(Intent(this, MainActivity::class.java))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            Handler(Looper.getMainLooper()).postDelayed({
+                finish()
+            }, 300)
         }
     }
 

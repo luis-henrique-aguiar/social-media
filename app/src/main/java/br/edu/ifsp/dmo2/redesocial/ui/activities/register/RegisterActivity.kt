@@ -2,13 +2,17 @@ package br.edu.ifsp.dmo2.redesocial.ui.activities.register
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import br.edu.ifsp.dmo2.redesocial.R
 import br.edu.ifsp.dmo2.redesocial.databinding.ActivityRegisterBinding
+import br.edu.ifsp.dmo2.redesocial.ui.activities.main.MainActivity
 import br.edu.ifsp.dmo2.redesocial.ui.activities.profile.ProfileActivity
 import br.edu.ifsp.dmo2.redesocial.ui.utils.InputColorUtils
 import com.google.android.material.textfield.TextInputEditText
@@ -93,7 +97,11 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.arrowBack.setOnClickListener {
-            finish()
+            startActivity(Intent(this, MainActivity::class.java))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            Handler(Looper.getMainLooper()).postDelayed({
+                finish()
+            }, 300)
         }
     }
 }
