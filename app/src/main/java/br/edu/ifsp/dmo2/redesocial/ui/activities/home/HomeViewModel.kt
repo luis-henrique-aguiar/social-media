@@ -101,7 +101,8 @@ class HomeViewModel : ViewModel() {
                     "profilePhoto" to profilePhoto,
                     "location" to _location.value,
                     "userEmail" to email,
-                    "createdAt" to FieldValue.serverTimestamp()
+                    "createdAt" to FieldValue.serverTimestamp(),
+                    "username" to _userData.value?.username
                 )
                 db.collection("posts").add(post)
                     .addOnSuccessListener {
@@ -183,6 +184,7 @@ class HomeViewModel : ViewModel() {
                 val fullName = document.getString("fullName") ?: "Usuário"
                 val profilePhotoString = document.getString("profilePhoto")
                 val location = document.getString("location")
+                val username = document.getString("username")
                 val postBitmap = imageString?.let { Base64Converter.stringToBitmap(it) }
                 val userProfilePhoto = if (!profilePhotoString.isNullOrEmpty()) {
                     Base64Converter.stringToBitmap(profilePhotoString)
@@ -196,7 +198,8 @@ class HomeViewModel : ViewModel() {
                     fullName = fullName,
                     userProfilePhoto = userProfilePhoto,
                     location = location,
-                    userEmail = email
+                    userEmail = email,
+                    username = username ?: "user"
                 )
             } catch (e: Exception) {
                 null
