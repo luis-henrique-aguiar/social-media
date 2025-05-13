@@ -35,7 +35,7 @@ Ao criar uma postagem, o app obtém a localização atual e traduz as coordenada
 
 # 🚀 Instalação do Aplicativo
 
-Para utilizar o **MicroRede Social**, siga os passos abaixo:
+Para utilizar o a **Micro Rede Social**, siga os passos abaixo:
 
 ## 1️⃣ Download do APK  
 Baixe o APK diretamente no link abaixo:  
