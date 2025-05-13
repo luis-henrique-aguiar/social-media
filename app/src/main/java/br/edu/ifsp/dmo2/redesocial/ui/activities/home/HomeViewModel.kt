@@ -89,10 +89,16 @@ class HomeViewModel : ViewModel() {
     fun addPost(image: String?, description: String) {
         val user = firebaseAuth.currentUser ?: return
         val email = user.email ?: return
+
         val splitedLocation = _location.value?.split(",")
         val city = when {
             splitedLocation.isNullOrEmpty() -> ""
             else -> splitedLocation.first()
+        }
+        val state = when {
+            splitedLocation.isNullOrEmpty() -> ""
+            splitedLocation.size < 2 -> ""
+            else -> splitedLocation[1]
         }
 
         _isLoading.value = true
@@ -105,7 +111,7 @@ class HomeViewModel : ViewModel() {
                     "image" to image,
                     "fullName" to fullName,
                     "profilePhoto" to profilePhoto,
-                    "location" to _location.value,
+                    "state" to state,
                     "city" to city,
                     "userEmail" to email,
                     "createdAt" to FieldValue.serverTimestamp(),
@@ -119,6 +125,7 @@ class HomeViewModel : ViewModel() {
                     }
                     .addOnFailureListener { e ->
                         _error.value = "Erro ao adicionar post: ${e.message}"
+                        Log.v("Error", e.message.toString())
                         _isLoading.value = false
                     }
             }
@@ -190,7 +197,8 @@ class HomeViewModel : ViewModel() {
                 val email = document.getString("userEmail") ?: return@mapNotNull null
                 val fullName = document.getString("fullName") ?: "Usuário"
                 val profilePhotoString = document.getString("profilePhoto")
-                val location = document.getString("location")
+                val state = document.getString("state") ?: ""
+                val city = document.getString("city") ?: ""
                 val username = document.getString("username")
                 val postBitmap = imageString?.let { Base64Converter.stringToBitmap(it) }
                 val userProfilePhoto = if (!profilePhotoString.isNullOrEmpty()) {
@@ -204,7 +212,8 @@ class HomeViewModel : ViewModel() {
                     photo = postBitmap,
                     fullName = fullName,
                     userProfilePhoto = userProfilePhoto,
-                    location = location,
+                    state = state,
+                    city = city,
                     userEmail = email,
                     username = username ?: "user"
                 )

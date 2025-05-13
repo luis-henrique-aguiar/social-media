@@ -8,14 +8,44 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Base64
 import java.io.ByteArrayOutputStream
-import androidx.core.graphics.createBitmap
 
 object Base64Converter {
+    private const val MAX_IMAGE_SIZE_KB = 800
+    private const val INITIAL_QUALITY = 70
+    private const val MIN_QUALITY = 30
+
     fun bitmapToString(bitmap: Bitmap): String {
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 80, stream)
-        val byteArray = stream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+
+        val resizedBitmap = resizeBitmapIfNeeded(bitmap)
+
+        var quality = INITIAL_QUALITY
+        do {
+            stream.reset()
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream)
+            quality -= 5
+        } while (stream.size() > MAX_IMAGE_SIZE_KB * 1024 && quality >= MIN_QUALITY)
+
+        return Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT)
+    }
+
+    private fun resizeBitmapIfNeeded(bitmap: Bitmap): Bitmap {
+        val maxDimension = 1024
+
+        return if (bitmap.width > maxDimension || bitmap.height > maxDimension) {
+            val scale = Math.min(
+                maxDimension.toFloat() / bitmap.width,
+                maxDimension.toFloat() / bitmap.height
+            )
+            Bitmap.createScaledBitmap(
+                bitmap,
+                (bitmap.width * scale).toInt(),
+                (bitmap.height * scale).toInt(),
+                true
+            )
+        } else {
+            bitmap
+        }
     }
 
     fun stringToBitmap(encodedString: String): Bitmap? {
@@ -29,25 +59,25 @@ object Base64Converter {
 
     fun drawableToString(drawable: Drawable?): String? {
         if (drawable == null) return null
-        val bitmap = if (drawable is BitmapDrawable) {
-            drawable.bitmap
-        } else {
-            createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight).also { bitmap ->
-                val canvas = Canvas(bitmap)
-                drawable.setBounds(0, 0, canvas.width, canvas.height)
-                drawable.draw(canvas)
+
+        val bitmap = when {
+            drawable is BitmapDrawable -> drawable.bitmap
+            else -> {
+                val width = drawable.intrinsicWidth.coerceAtLeast(1)
+                val height = drawable.intrinsicHeight.coerceAtLeast(1)
+                Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also {
+                    val canvas = Canvas(it)
+                    drawable.setBounds(0, 0, canvas.width, canvas.height)
+                    drawable.draw(canvas)
+                }
             }
         }
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+        return bitmapToString(bitmap)
     }
 
     fun getDefaultBitmap(): Bitmap {
-        val bitmap = createBitmap(100, 100)
-        val canvas = Canvas(bitmap)
-        canvas.drawColor(Color.LTGRAY)
-        return bitmap
+        return Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888).apply {
+            Canvas(this).drawColor(Color.LTGRAY)
+        }
     }
 }

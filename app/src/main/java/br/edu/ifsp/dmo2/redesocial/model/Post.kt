@@ -7,7 +7,8 @@ data class Post(
     val photo: Bitmap?,
     val fullName: String,
     val userProfilePhoto: Bitmap?,
-    val location: String?,
+    val state: String,
+    val city: String,
     val userEmail: String,
     val username: String
 )
