@@ -40,7 +40,7 @@ Para utilizar o a **Micro Rede Social**, siga os passos abaixo:
 ## 1️⃣ Download do APK  
 Baixe o APK diretamente no link abaixo:  
 
-🔗 **[Download do APK](https://drive.google.com/file/d/1j6E5ap0_G3Oowq3eKLrBr3KE-O6ozKlP/view?usp=sharing)**  
+🔗 **[Download do APK](https://github.com/luis-henrique-aguiar/social-media/blob/main/release/social-media.apk)**  
 
 ## 2️⃣ Instalação no Android  
 1. No seu dispositivo, abra **Configurações > Segurança** e ative a opção **Fontes desconhecidas** (caso o Android solicite permissão para instalar aplicativos externos).  
